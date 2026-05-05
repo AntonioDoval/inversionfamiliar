@@ -163,9 +163,9 @@
 
   /* Results */
   .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 10px; }
-  .result-card { background: var(--bg); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border2); }
+  .result-card { background: var(--bg); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border2); transition: background .35s, border-color .35s; }
   .result-label { font-size: 9px; color: var(--ink3); margin-bottom: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-  .result-val { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
+  .result-val { font-family: 'Playfair Display', serif; font-size: 0.88rem; font-weight: 600; color: var(--ink); line-height: 1.2; }
   .result-sub { font-size: 10px; color: var(--ink3); margin-top: 2px; }
 
   /* Bar indicators */
@@ -189,8 +189,29 @@
 
   #sim { padding-top: 24px !important; padding-bottom: 24px !important; }
 
+  #proj-reinvest::-webkit-slider-thumb { background: #2D6A4F; }
+  #proj-years::-webkit-slider-thumb   { background: #2D6A4F; }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .anim { animation: fadeUp .5s ease both; }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    .sim-layout { grid-template-columns: 1fr !important; }
+    .exp-grid   { grid-template-columns: 1fr !important; }
+    .var-grid   { grid-template-columns: 1fr !important; }
+    .inst-grid  { grid-template-columns: 1fr 1fr !important; }
+    .result-grid { grid-template-columns: 1fr 1fr; }
+    .hero { padding: 48px 1.2rem 40px; }
+    section { padding: 40px 1.2rem; }
+    nav { padding: 0 1.2rem; }
+    .donut-legend { flex-direction: row !important; flex-wrap: wrap; }
+    #proj-chart-wrap { height: 180px !important; }
+  }
+  @media (max-width: 380px) {
+    .inst-grid { grid-template-columns: 1fr !important; }
+    .result-grid { grid-template-columns: 1fr !important; }
+  }
 </style>
 </head>
 <body>
@@ -495,22 +516,22 @@
       <!-- Proyecciones -->
       <div class="section-label" style="margin-bottom:7px;">Proyecciones</div>
       <div class="result-grid">
-        <div class="result-card">
+        <div class="result-card" id="card-monthly">
           <div class="result-label">Renta mensual</div>
           <div class="result-val" id="res-monthly">—</div>
           <div class="result-sub" id="sub-monthly">en USD aprox.</div>
         </div>
-        <div class="result-card">
+        <div class="result-card" id="card-yearly">
           <div class="result-label">Renta anual</div>
           <div class="result-val" id="res-yearly">—</div>
           <div class="result-sub" id="sub-yearly">sin tocar capital</div>
         </div>
-        <div class="result-card">
+        <div class="result-card" id="card-cost-init">
           <div class="result-label">Costo inicial</div>
           <div class="result-val" id="res-cost-init">—</div>
           <div class="result-sub" id="sub-cost-init">entrada al activo</div>
         </div>
-        <div class="result-card">
+        <div class="result-card" id="card-cost-yr">
           <div class="result-label">Costo anual</div>
           <div class="result-val" id="res-cost-yr">—</div>
           <div class="result-sub" id="sub-cost-yr">gestión / año</div>
@@ -542,6 +563,49 @@
 
   </div>
 
+  <!-- PROYECCIÓN A FUTURO -->
+  <div class="sim-panel" style="margin-top:14px;">
+    <div class="section-label" style="margin-bottom:10px;">Proyección a futuro</div>
+
+    <!-- Controls -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <span style="font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;">Reinversión de renta</span>
+          <span style="font-size:12px;font-weight:500;color:var(--ink);" id="proj-reinvest-val">20%</span>
+        </div>
+        <input type="range" id="proj-reinvest" min="0" max="100" value="20" step="5"
+          oninput="document.getElementById('proj-reinvest-val').textContent=this.value+'%'; drawChart();"
+          style="--thumb-c:#2D6A4F">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-top:2px;">
+          <span>Retiro total</span><span>Reinversión total</span>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <span style="font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;">Horizonte</span>
+          <span style="font-size:12px;font-weight:500;color:var(--ink);" id="proj-years-val">10 años</span>
+        </div>
+        <input type="range" id="proj-years" min="1" max="50" value="10" step="1"
+          oninput="document.getElementById('proj-years-val').textContent=this.value+' años'; drawChart();">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-top:2px;">
+          <span>1 año</span><span>50 años</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div style="position:relative;width:100%;height:220px;">
+      <canvas id="proj-chart" role="img" aria-label="Gráfico de proyección de capital a futuro"></canvas>
+    </div>
+
+    <!-- Legend -->
+    <div style="display:flex;gap:16px;justify-content:center;margin-top:10px;font-size:11px;color:var(--ink2);flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:24px;height:2px;background:#2D6A4F;display:inline-block;border-radius:1px;"></span>Escenario central</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="width:24px;height:2px;background:#2D6A4F;opacity:0.4;display:inline-block;border-radius:1px;border-top:2px dashed #2D6A4F;"></span>Rango optimista/pesimista</span>
+    </div>
+  </div>
+
 </div>
 </section>
 
@@ -560,21 +624,29 @@
 // ---- Data ----
 const INSTRUMENTS = [
   { key: 'cash',  label: 'Efectivo / caja de seguridad', color: '#8B1A1A',
-    yield: 0.00, initCost: 0.002, annualCost: 0.003, liq: 1.00, risk: 0.04, effort: 0.02 },
+    yield: 0.000, initCost: 0.002, annualCost: 0.003, liq: 1.00, risk: 0.04, effort: 0.02,
+    yieldVar: 0.00, costVar: 0.05 },
   { key: 'plazo', label: 'Plazo fijo en USD',            color: '#6B6B6B',
-    yield: 0.02, initCost: 0.001, annualCost: 0.001, liq: 0.55, risk: 0.10, effort: 0.05 },
+    yield: 0.008, initCost: 0.001, annualCost: 0.001, liq: 0.55, risk: 0.10, effort: 0.05,
+    yieldVar: 0.10, costVar: 0.10 },
   { key: 'vivir', label: 'Propiedad para vivir',         color: '#B8860B',
-    yield: 0.00, initCost: 0.040, annualCost: 0.020, liq: 0.06, risk: 0.25, effort: 0.40 },
+    yield: 0.000, initCost: 0.075, annualCost: 0.020, liq: 0.06, risk: 0.25, effort: 0.40,
+    yieldVar: 0.00, costVar: 0.40 },
   { key: 'prop',  label: 'Propiedad para alquilar',      color: '#8B6914',
-    yield: 0.04, initCost: 0.040, annualCost: 0.018, liq: 0.08, risk: 0.28, effort: 0.70 },
+    yield: 0.040, initCost: 0.075, annualCost: 0.018, liq: 0.08, risk: 0.28, effort: 0.70,
+    yieldVar: 0.30, costVar: 0.50 },
   { key: 'on',    label: 'Obligaciones Negociables',     color: '#1565C0',
-    yield: 0.075, initCost: 0.005, annualCost: 0.003, liq: 0.75, risk: 0.30, effort: 0.12 },
+    yield: 0.075, initCost: 0.005, annualCost: 0.003, liq: 0.75, risk: 0.30, effort: 0.12,
+    yieldVar: 0.20, costVar: 0.15 },
   { key: 'us',    label: 'Bonos del Tesoro EEUU',        color: '#0288D1',
-    yield: 0.045, initCost: 0.002, annualCost: 0.001, liq: 0.95, risk: 0.05, effort: 0.05 },
+    yield: 0.045, initCost: 0.002, annualCost: 0.001, liq: 0.95, risk: 0.05, effort: 0.05,
+    yieldVar: 0.10, costVar: 0.10 },
   { key: 'fci',   label: 'Fondos Comunes (FCI)',         color: '#00838F',
-    yield: 0.065, initCost: 0.003, annualCost: 0.008, liq: 0.90, risk: 0.28, effort: 0.08 },
+    yield: 0.065, initCost: 0.003, annualCost: 0.008, liq: 0.90, risk: 0.28, effort: 0.08,
+    yieldVar: 0.25, costVar: 0.20 },
   { key: 'cedear',label: 'CEDEARs',                      color: '#E65100',
-    yield: 0.07,  initCost: 0.005, annualCost: 0.004, liq: 0.85, risk: 0.65, effort: 0.50 },
+    yield: 0.020, initCost: 0.005, annualCost: 0.004, liq: 0.85, risk: 0.65, effort: 0.50,
+    yieldVar: 0.50, costVar: 0.25 },
 ];
 
 let totalCapital = 500000;
@@ -720,21 +792,80 @@ function updateSim() {
   // Auto cost display
   document.getElementById('costs-auto-val').textContent = 'USD ' + fmt(totalCosts);
 
-  // Results with pct sub
-  const monthly = totalYield / 12;
-  const yieldPct = cap > 0 ? ((totalYield / cap) * 100).toFixed(1) : null;
-  const initPct  = cap > 0 ? ((totalInitCost / cap) * 100).toFixed(1) : null;
-  const annPct   = cap > 0 ? ((totalAnnualCost / cap) * 100).toFixed(1) : null;
+  // Weighted variance factors for yield and cost
+  let weightedYieldVar = 0, weightedCostVar = 0;
+  INSTRUMENTS.forEach(inst => {
+    const w = usedPct > 0 ? s[inst.key] / usedPct : 0;
+    weightedYieldVar += w * inst.yieldVar;
+    weightedCostVar  += w * inst.costVar;
+  });
 
-  document.getElementById('res-monthly').textContent  = cap > 0 && monthly > 0 ? 'USD ' + fmt(monthly) : '—';
-  document.getElementById('res-yearly').textContent   = cap > 0 && totalYield > 0 ? 'USD ' + fmt(totalYield) : '—';
-  document.getElementById('res-cost-init').textContent = cap > 0 ? 'USD ' + fmt(totalInitCost) : '—';
-  document.getElementById('res-cost-yr').textContent   = cap > 0 ? 'USD ' + fmt(totalAnnualCost) : '—';
+  // Range helper: returns { mid, lo, hi } — cost ranges are asymmetric (skew high)
+  function range(mid, varFactor, asymmetric = false) {
+    const lo = Math.max(0, mid * (1 - varFactor));
+    const hi = asymmetric ? mid * (1 + varFactor * 1.6) : mid * (1 + varFactor);
+    return { mid, lo, hi };
+  }
 
-  document.getElementById('sub-monthly').textContent  = yieldPct ? yieldPct + '% anual del capital' : 'en USD aprox.';
-  document.getElementById('sub-yearly').textContent   = yieldPct ? yieldPct + '% del capital invertido' : 'sin tocar capital';
-  document.getElementById('sub-cost-init').textContent = initPct ? initPct + '% del capital' : 'entrada al activo';
-  document.getElementById('sub-cost-yr').textContent   = annPct ? annPct + '% del capital / año' : 'gestión y mantenimiento';
+  const monthly    = totalYield / 12;
+  const rMonthly   = range(monthly, weightedYieldVar);
+  const rYearly    = range(totalYield, weightedYieldVar);
+  const rInitCost  = range(totalInitCost, weightedCostVar, true);
+  const rAnnCost   = range(totalAnnualCost, weightedCostVar, true);
+
+  const yieldPct = cap > 0 ? (totalYield / cap) * 100 : 0;
+  const initPct  = cap > 0 ? (totalInitCost / cap) * 100 : 0;
+  const annPct   = cap > 0 ? (totalAnnualCost / cap) * 100 : 0;
+
+  // Format range string
+  function fmtRange(r, hasValue) {
+    if (!hasValue) return '—';
+    if (r.lo === r.hi || weightedYieldVar < 0.01) return 'USD ' + fmt(r.mid);
+    return 'USD ' + fmt(r.lo) + ' – ' + fmt(r.hi);
+  }
+  function fmtCostRange(r) {
+    if (r.hi < 1) return '—';
+    if (r.lo === r.hi || weightedCostVar < 0.01) return 'USD ' + fmt(r.mid);
+    return 'USD ' + fmt(r.lo) + ' – ' + fmt(r.hi);
+  }
+
+  const hasRenta = cap > 0 && totalYield > 0;
+  document.getElementById('res-monthly').textContent   = fmtRange(rMonthly, hasRenta);
+  document.getElementById('res-yearly').textContent    = fmtRange(rYearly, hasRenta);
+  document.getElementById('res-cost-init').textContent = cap > 0 ? fmtCostRange(rInitCost) : '—';
+  document.getElementById('res-cost-yr').textContent   = cap > 0 ? fmtCostRange(rAnnCost) : '—';
+
+  document.getElementById('sub-monthly').textContent   = hasRenta ? yieldPct.toFixed(1) + '% anual del capital' : 'en USD aprox.';
+  document.getElementById('sub-yearly').textContent    = hasRenta ? yieldPct.toFixed(1) + '% del capital invertido' : 'sin tocar capital';
+  document.getElementById('sub-cost-init').textContent = initPct ? initPct.toFixed(1) + '% del capital' : 'entrada al activo';
+  document.getElementById('sub-cost-yr').textContent   = annPct ? annPct.toFixed(1) + '% del capital / año' : 'gestión / año';
+
+  // Color result cards
+  const rentaColor = usedPct === 0 ? null : yieldPct >= 5 ? 'green' : yieldPct >= 2 ? 'yellow' : 'red';
+  const initColor  = usedPct === 0 ? null : initPct < 1 ? 'green' : initPct < 3 ? 'yellow' : 'red';
+  const annColor   = usedPct === 0 ? null : annPct < 0.5 ? 'green' : annPct < 1.5 ? 'yellow' : 'red';
+
+  const CARD_COLORS = {
+    green:  { bg: '#F0FBF4', border: 'rgba(45,106,79,0.25)', val: '#1B5E20', sub: '#2D6A4F' },
+    yellow: { bg: '#FFFBEB', border: 'rgba(180,140,0,0.25)', val: '#7A5F00', sub: '#9A7A00' },
+    red:    { bg: '#FFF5F5', border: 'rgba(183,28,28,0.22)', val: '#8B1A1A', sub: '#B71C1C' },
+    null:   { bg: 'var(--bg)', border: 'var(--border2)',      val: 'var(--ink)', sub: 'var(--ink3)' },
+  };
+
+  function tintCard(cardId, valId, subId, colorKey) {
+    const c = CARD_COLORS[colorKey] || CARD_COLORS['null'];
+    const card = document.getElementById(cardId);
+    const val  = document.getElementById(valId);
+    const sub  = document.getElementById(subId);
+    if (card) { card.style.background = c.bg; card.style.borderColor = c.border; }
+    if (val)  val.style.color = c.val;
+    if (sub)  sub.style.color = c.sub;
+  }
+
+  tintCard('card-monthly',   'res-monthly',   'sub-monthly',   rentaColor);
+  tintCard('card-yearly',    'res-yearly',    'sub-yearly',    rentaColor);
+  tintCard('card-cost-init', 'res-cost-init', 'sub-cost-init', initColor);
+  tintCard('card-cost-yr',   'res-cost-yr',   'sub-cost-yr',   annColor);
 
   // Bars
   setBar('liq', weightedLiq, [
@@ -824,9 +955,151 @@ function toggleMyth(card) {
   if (!isOpen) card.classList.add('open');
 }
 
+// ---- Projection chart ----
+let projChart = null;
+
+function drawChart() {
+  const years      = +document.getElementById('proj-years').value;
+  const reinvestPct= +document.getElementById('proj-reinvest').value / 100;
+  const cap        = totalCapital || 0;
+  if (cap < 1) return;
+
+  // Get current weighted yield and variance from sliders
+  const s = {};
+  INSTRUMENTS.forEach(inst => { s[inst.key] = +(document.getElementById('sl-' + inst.key)?.value || 0); });
+  const usedPct = Math.min(Object.values(s).reduce((a,b)=>a+b,0), 100);
+
+  let baseYield = 0, yieldVar = 0;
+  INSTRUMENTS.forEach(inst => {
+    const a = (s[inst.key] / 100) * cap;
+    baseYield += a * inst.yield;
+    const w = usedPct > 0 ? s[inst.key] / usedPct : 0;
+    yieldVar  += w * inst.yieldVar;
+  });
+
+  const annualRate     = cap > 0 ? baseYield / cap : 0;
+  const annualRateLo   = annualRate * (1 - yieldVar);
+  const annualRateHi   = annualRate * (1 + yieldVar);
+
+  // Simulate year by year
+  function simulate(rate) {
+    let c = cap;
+    const pts = [c];
+    for (let y = 1; y <= years; y++) {
+      const renta = c * rate;
+      const reinvested = renta * reinvestPct;
+      c = c + reinvested;
+      pts.push(Math.round(c));
+    }
+    return pts;
+  }
+
+  const labels  = Array.from({length: years + 1}, (_, i) => i === 0 ? 'Hoy' : 'Año ' + i);
+  const dataMid = simulate(annualRate);
+  const dataLo  = simulate(annualRateLo);
+  const dataHi  = simulate(annualRateHi);
+
+  const fmtK = v => {
+    if (v >= 1000000) return 'USD ' + (v/1000000).toFixed(1) + 'M';
+    if (v >= 1000)    return 'USD ' + Math.round(v/1000) + 'k';
+    return 'USD ' + Math.round(v);
+  };
+
+  const ctx = document.getElementById('proj-chart').getContext('2d');
+
+  if (projChart) { projChart.destroy(); projChart = null; }
+
+  projChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Optimista',
+          data: dataHi,
+          borderColor: 'rgba(45,106,79,0.35)',
+          borderWidth: 1.5,
+          borderDash: [4, 3],
+          pointRadius: 0,
+          fill: '+1',
+          backgroundColor: 'rgba(45,106,79,0.07)',
+          tension: 0.3,
+        },
+        {
+          label: 'Central',
+          data: dataMid,
+          borderColor: '#2D6A4F',
+          borderWidth: 2.5,
+          pointRadius: (ctx) => ctx.dataIndex === years ? 4 : 0,
+          pointBackgroundColor: '#2D6A4F',
+          fill: false,
+          tension: 0.3,
+        },
+        {
+          label: 'Pesimista',
+          data: dataLo,
+          borderColor: 'rgba(45,106,79,0.35)',
+          borderWidth: 1.5,
+          borderDash: [4, 3],
+          pointRadius: 0,
+          fill: '-1',
+          backgroundColor: 'rgba(45,106,79,0.07)',
+          tension: 0.3,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => item.dataset.label + ': ' + fmtK(item.raw),
+          },
+          backgroundColor: '#1C1A17',
+          titleColor: '#fff',
+          bodyColor: 'rgba(255,255,255,0.75)',
+          padding: 10,
+          cornerRadius: 8,
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 10, family: 'DM Sans' },
+            color: '#9C9890',
+            maxTicksLimit: 11,
+            maxRotation: 0,
+          }
+        },
+        y: {
+          grid: { color: 'rgba(28,26,23,0.06)', drawBorder: false },
+          ticks: {
+            font: { size: 10, family: 'DM Sans' },
+            color: '#9C9890',
+            callback: fmtK,
+            maxTicksLimit: 6,
+          }
+        }
+      }
+    }
+  });
+}
+
 // Init
 buildSliders();
 updateSim();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// Draw chart once Chart.js is loaded, then re-draw on every updateSim
+const _origUpdateSim = updateSim;
+updateSim = function() { _origUpdateSim(); drawChart(); };
+drawChart();
 
 // Falling SVG bills
 (function() {
