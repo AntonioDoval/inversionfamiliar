@@ -49,17 +49,6 @@
     position: absolute; top: 0; left: 0; right: 0; height: 340px;
     overflow: hidden; pointer-events: none; z-index: 0;
   }
-  .bill {
-    position: absolute; top: -60px; font-size: 28px; opacity: 0;
-    animation: fall linear infinite;
-    user-select: none; pointer-events: none;
-  }
-  @keyframes fall {
-    0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
-    5%   { opacity: 0.18; }
-    90%  { opacity: 0.13; }
-    100% { transform: translateY(380px) rotate(25deg); opacity: 0; }
-  }
   .hero-tag { display: inline-block; background: #D8F3DC; color: #2D6A4F; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 20px; margin-bottom: 24px; letter-spacing: 0.04em; text-transform: uppercase; }
   .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.18; font-weight: 600; margin-bottom: 20px; }
   .hero h1 em { font-style: italic; color: #40916C; }
@@ -74,7 +63,8 @@
   .divider { height: 1px; background: var(--border); max-width: 920px; margin: 0 auto; }
 
   /* OBJECTIVE CARDS */
-  .exp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 48px; }
+  .exp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 48px; }
+  @media (max-width: 500px) { .exp-grid { grid-template-columns: 1fr; } }
   .exp-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s; }
   .exp-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.07); }
   .exp-card-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 600; color: var(--bg2); position: absolute; top: 10px; right: 18px; line-height: 1; pointer-events: none; }
@@ -86,7 +76,8 @@
   .exp-card.dark p { color: rgba(255,255,255,0.65); }
 
   /* VARIABLE CARDS */
-  .var-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 48px; }
+  .var-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 48px; }
+  @media (max-width: 500px) { .var-grid { grid-template-columns: 1fr; } }
   .var-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
   .var-icon { font-size: 22px; margin-bottom: 12px; }
   .var-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
@@ -847,21 +838,52 @@ function toggleMyth(card) {
 buildSliders();
 updateSim();
 
-// Falling dollars
+// Falling SVG bills
 (function() {
   const bg = document.getElementById('hero-bg');
-  const emojis = ['💵','💴','💶','💷','💸'];
-  const count = 22;
+
+  // One simple bill — slightly bent, not a banana
+  const BILL = `
+    <rect x="1" y="5" width="88" height="32" rx="4" fill="#d4edda" stroke="#2D6A4F" stroke-width="1.3"/>
+    <rect x="5" y="9" width="80" height="24" rx="2" fill="none" stroke="#2D6A4F" stroke-width="0.55" stroke-dasharray="3 2"/>
+    <ellipse cx="45" cy="21" rx="9" ry="7" fill="#b7dfc0" stroke="#2D6A4F" stroke-width="0.8"/>
+    <text x="45" y="25" text-anchor="middle" font-size="10" font-family="Georgia,serif" font-weight="bold" fill="#2D6A4F">$</text>
+    <rect x="10" y="16" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+    <rect x="10" y="21" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+    <rect x="10" y="26" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+    <rect x="67" y="16" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+    <rect x="67" y="21" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+    <rect x="67" y="26" width="13" height="2" rx="1" fill="#2D6A4F" opacity="0.3"/>
+  `;
+
+  const count = 18;
   for (let i = 0; i < count; i++) {
-    const el = document.createElement('span');
-    el.className = 'bill';
-    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    const left = Math.random() * 100;
-    const delay = Math.random() * 8;
-    const dur   = 5 + Math.random() * 7;
-    const size  = 18 + Math.floor(Math.random() * 20);
-    el.style.cssText = `left:${left}%;animation-duration:${dur}s;animation-delay:${delay}s;font-size:${size}px;`;
-    bg.appendChild(el);
+    const scale = 0.5 + Math.random() * 0.9;
+    const w     = Math.round(90 * scale);
+    const h     = Math.round(42 * scale);
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 90 42" fill="none" xmlns="http://www.w3.org/2000/svg">${BILL}</svg>`;
+    const svg = wrap.firstChild;
+
+    const left  = Math.random() * 94;
+    const delay = -(Math.random() * 14);
+    const dur   = 6 + Math.random() * 8;
+    const rotA  = -35 + Math.random() * 70;
+    const rotB  = rotA + (-20 + Math.random() * 40);
+    const kn    = 'fb' + i;
+
+    const st = document.createElement('style');
+    st.textContent = `@keyframes ${kn}{
+      0%  {transform:translateY(-80px) rotate(${rotA}deg);opacity:0}
+      8%  {opacity:0.22}
+      86% {opacity:0.17}
+      100%{transform:translateY(430px) rotate(${rotB}deg);opacity:0}
+    }`;
+    document.head.appendChild(st);
+
+    svg.style.cssText = `position:absolute;left:${left}%;top:0;animation:${kn} ${dur}s ${delay}s linear infinite;pointer-events:none;`;
+    bg.appendChild(svg);
   }
 })();
 </script>
