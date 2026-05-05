@@ -115,92 +115,82 @@
 
   /* SIMULATOR */
   #sim { background: var(--bg); }
-  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .sim-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
   @media (max-width: 720px) { .sim-layout { grid-template-columns: 1fr; } }
 
-  .sim-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .sim-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .sim-panel.tint-ok   { background: #F0FBF4; border-color: rgba(45,106,79,0.28); transition: background .4s, border-color .4s; }
+  .sim-panel.tint-over { background: #FFF5F5; border-color: rgba(183,28,28,0.28); transition: background .4s, border-color .4s; }
 
-  /* Capital input */
-  .capital-input-wrap { margin-bottom: 16px; }
-  .capital-label { font-size: 11px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-  .capital-input-row { display: flex; align-items: center; gap: 10px; }
-  .capital-prefix { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--ink2); }
+  /* Capital row */
   .capital-input {
-    font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 600;
+    font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600;
     border: none; background: none; color: var(--ink); outline: none;
-    width: 100%; border-bottom: 2px solid var(--border); padding-bottom: 4px;
+    width: 100%; border-bottom: 1.5px solid var(--border); padding-bottom: 2px;
     transition: border-color .2s;
   }
   .capital-input:focus { border-color: var(--ink); }
 
-  /* Status bar inside slider panel */
-  .sim-status { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg); border-radius: 8px; margin-bottom: 18px; font-size: 12px; }
-  .sim-status-label { color: var(--ink3); }
-  .sim-remaining { font-weight: 500; transition: color .3s; }
+  /* Status */
+  .sim-remaining { font-weight: 500; font-size: 11px; transition: color .3s; white-space: nowrap; }
   .sim-remaining.ok { color: #2D6A4F; }
   .sim-remaining.over { color: #B5532A; }
 
-  /* Sliders */
-  .sim-row { margin-bottom: 10px; }
-  .sim-row-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-  .sim-row-label { font-size: 12px; font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 6px; }
-  .sim-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .sim-row-vals { display: flex; align-items: baseline; gap: 6px; }
-  .sim-pct { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .sim-usd { font-size: 11px; color: var(--ink3); }
+  /* Slider rows — single tight line */
+  .sim-row { margin-bottom: 6px; }
+  .sim-row-head { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+  .sim-row-label { font-size: 11.5px; font-weight: 500; color: var(--ink); flex: 1; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sim-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .sim-row-vals { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+  .sim-pct { font-size: 11px; color: var(--ink3); min-width: 26px; text-align: right; }
+  .sim-amount-input {
+    font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+    border-radius: 5px; padding: 2px 6px; width: 88px; text-align: right;
+    outline: none; transition: border-color .2s;
+  }
+  .sim-amount-input:focus { border-color: var(--ink2); }
 
-  input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--bg2); border-radius: 3px; outline: none; cursor: pointer; }
-  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 1px 5px rgba(0,0,0,0.2); transition: transform .15s; }
+  input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--bg2); border-radius: 2px; outline: none; cursor: pointer; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,0.18); transition: transform .15s; }
   input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
-  input[type="range"]:disabled { opacity: 0.5; cursor: default; }
-  input[type="range"]:disabled::-webkit-slider-thumb { cursor: default; transform: none; }
 
-  .costs-row { margin-top: 4px; padding: 10px 12px; background: #FFF5F5; border: 1px solid #FFCDD2; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .costs-row-label { font-size: 12px; color: var(--c-costs); font-weight: 500; display: flex; align-items: center; gap: 7px; }
-  .costs-row-val { font-size: 12px; font-weight: 500; color: var(--c-costs); }
-  .sim-alert { background: #FFF3E0; border: 1px solid #FFCC80; border-radius: 8px; padding: 12px 16px; font-size: 12.5px; color: #E65100; margin-top: 12px; display: none; }
+  .costs-row { margin-top: 6px; padding: 6px 10px; background: #FFF5F5; border: 1px solid #FFCDD2; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .costs-row-label { font-size: 11px; color: var(--c-costs); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+  .costs-row-val { font-size: 11px; font-weight: 500; color: var(--c-costs); }
+  .sim-alert { background: #FFF3E0; border: 1px solid #FFCC80; border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #E65100; margin-top: 8px; display: none; }
   .sim-alert.visible { display: block; }
 
   /* Results */
-  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .result-card { background: var(--bg); border-radius: var(--radius-sm); padding: 14px; border: 1px solid var(--border2); }
-  .result-label { font-size: 10px; color: var(--ink3); margin-bottom: 5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-  .result-val { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
-  .result-sub { font-size: 11px; color: var(--ink3); margin-top: 3px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 10px; }
+  .result-card { background: var(--bg); border-radius: 8px; padding: 8px 10px; border: 1px solid var(--border2); }
+  .result-label { font-size: 9px; color: var(--ink3); margin-bottom: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .result-val { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
+  .result-sub { font-size: 10px; color: var(--ink3); margin-top: 2px; }
 
   /* Bar indicators */
-  .bar-indicator { margin-top: 14px; }
-  .bar-ind-label-row { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink3); margin-bottom: 5px; }
-  .bar-ind-title { font-size: 12px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 14px; }
-  .bar-bg { height: 7px; background: var(--bg2); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
-  .bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
-  .bar-desc { font-size: 12px; color: var(--ink2); line-height: 1.5; }
+  .bar-block { margin-top: 8px; }
+  .bar-ind-label-row { display: flex; justify-content: space-between; font-size: 10px; color: var(--ink3); margin-bottom: 3px; }
+  .bar-ind-title { font-size: 10px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; margin-top: 8px; }
+  .bar-bg { height: 5px; background: var(--bg2); border-radius: 3px; overflow: hidden; margin-bottom: 3px; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+  .bar-desc { font-size: 11px; color: var(--ink2); line-height: 1.4; }
 
   /* Donut */
-  .donut-wrap { display: flex; justify-content: center; padding: 14px 0 6px; }
-  .donut-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 11.5px; color: var(--ink2); }
+  .donut-legend { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--ink2); }
   .donut-legend span { display: flex; align-items: center; gap: 5px; }
   .donut-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
-  .note-card { background: #FFFDE7; border: 1px solid #F9E59A; border-radius: var(--radius-sm); padding: 14px 18px; font-size: 12.5px; color: #7A6A2A; line-height: 1.65; margin-top: 14px; }
+  .note-card { background: #FFFDE7; border: 1px solid #F9E59A; border-radius: var(--radius-sm); padding: 14px 18px; font-size: 12.5px; color: #7A6A2A; line-height: 1.65; }
   .note-card strong { font-weight: 500; }
 
   footer { text-align: center; padding: 36px 2rem; font-size: 12px; color: var(--ink3); border-top: 1px solid var(--border); }
   footer strong { color: var(--ink2); font-weight: 500; }
 
+  #sim { padding-top: 24px !important; padding-bottom: 24px !important; }
+
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .anim { animation: fadeUp .5s ease both; }
-  .sim-panel.tint-ok   { background: #F0FBF4; border-color: rgba(45,106,79,0.28); transition: background .4s, border-color .4s; }
-  .sim-panel.tint-over { background: #FFF5F5; border-color: rgba(183,28,28,0.28); transition: background .4s, border-color .4s; }
-  .sim-amount-input {
-    font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 500;
-    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
-    border-radius: 6px; padding: 3px 8px; width: 106px; text-align: right;
-    outline: none; transition: border-color .2s;
-  }
-  .sim-amount-input:focus { border-color: var(--ink2); }
-  .sim-row-vals { display: flex; align-items: center; gap: 6px; }
-  .sim-pct { font-size: 12px; font-weight: 500; color: var(--ink3); min-width: 28px; text-align: right; }
 </style>
 </head>
 <body>
@@ -463,30 +453,26 @@
 <section id="sim" style="padding: 40px 2rem;">
 <div class="section-inner">
 
-  <div class="section-label">05 — Simulador</div>
-  <div class="section-title" style="font-size: clamp(1.4rem,3vw,1.8rem); margin-bottom: 6px;">Probá combinaciones<br>y mirá qué pasa</div>
-  <div class="section-sub" style="margin-bottom: 24px; font-size: 0.92rem;">Ingresá el capital, mové las barritas y los resultados se actualizan en tiempo real. Números orientativos.</div>
+  <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;">
+    <div class="section-label" style="margin-bottom:0;">05 — Simulador</div>
+    <span style="font-size:12px;color:var(--ink3);">Mové las barritas y los resultados se actualizan en tiempo real.</span>
+  </div>
 
   <div class="sim-layout">
 
-    <!-- LEFT: capital + sliders en una sola tarjeta -->
-    <div class="sim-panel" id="sliders-panel" style="padding: 18px;">
+    <!-- LEFT: capital + sliders -->
+    <div class="sim-panel" id="sliders-panel">
 
-      <!-- Capital input compacto -->
-      <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border2);">
-        <span style="font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Capital USD</span>
-        <span class="capital-prefix" style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--ink2);">$</span>
-        <input class="capital-input" type="text" id="capital-field" value="500.000" maxlength="12"
-          oninput="onCapitalInput(this)"
-          style="font-size:1.3rem; border-bottom-width:1.5px;" />
-        <span class="sim-remaining ok" id="remaining-badge" style="margin-left:auto;font-size:11px;white-space:nowrap;">✓ Completa</span>
+      <!-- Capital + badge en una línea -->
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border2);">
+        <span style="font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Capital USD $</span>
+        <input class="capital-input" type="text" id="capital-field" value="500.000" maxlength="12" oninput="onCapitalInput(this)" />
+        <span class="sim-remaining ok" id="remaining-badge" style="margin-left:auto;">✓ ok</span>
       </div>
 
-      <!-- Sliders -->
       <div id="sliders-container"></div>
 
-      <!-- Auto costs row -->
-      <div class="costs-row" style="margin-top:6px;">
+      <div class="costs-row">
         <div class="costs-row-label">
           <div class="sim-dot" style="background:var(--c-costs)"></div>
           Costos estimados
@@ -497,57 +483,61 @@
       <div class="sim-alert" id="alert-over">⚠ La suma supera el 100%. Bajá alguna barrita.</div>
     </div>
 
-    <!-- RIGHT: donut + proyecciones en una sola tarjeta -->
-    <div class="sim-panel" style="padding: 18px;">
+    <!-- RIGHT: donut + proyecciones -->
+    <div class="sim-panel">
 
-      <!-- Donut compacto -->
-      <div style="display:flex; gap:16px; align-items:center; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border2);">
-        <svg width="100" height="100" viewBox="0 0 140 140" id="donut-svg" style="flex-shrink:0;"></svg>
-        <div class="donut-legend" id="donut-legend" style="font-size:11px; gap:4px 10px;"></div>
+      <!-- Donut + leyenda en fila -->
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border2);">
+        <svg width="80" height="80" viewBox="0 0 140 140" id="donut-svg" style="flex-shrink:0;"></svg>
+        <div class="donut-legend" id="donut-legend"></div>
       </div>
 
       <!-- Proyecciones -->
-      <div class="section-label" style="margin-bottom:10px;">Proyecciones</div>
-      <div class="result-grid" style="gap:8px; margin-bottom:10px;">
-        <div class="result-card" style="padding:10px 12px;">
+      <div class="section-label" style="margin-bottom:7px;">Proyecciones</div>
+      <div class="result-grid">
+        <div class="result-card">
           <div class="result-label">Renta mensual</div>
-          <div class="result-val" id="res-monthly" style="font-size:1.1rem;">—</div>
+          <div class="result-val" id="res-monthly">—</div>
           <div class="result-sub" id="sub-monthly">en USD aprox.</div>
         </div>
-        <div class="result-card" style="padding:10px 12px;">
+        <div class="result-card">
           <div class="result-label">Renta anual</div>
-          <div class="result-val" id="res-yearly" style="font-size:1.1rem;">—</div>
+          <div class="result-val" id="res-yearly">—</div>
           <div class="result-sub" id="sub-yearly">sin tocar capital</div>
         </div>
-        <div class="result-card" style="padding:10px 12px;">
+        <div class="result-card">
           <div class="result-label">Costo inicial</div>
-          <div class="result-val" id="res-cost-init" style="font-size:1.1rem;">—</div>
+          <div class="result-val" id="res-cost-init">—</div>
           <div class="result-sub" id="sub-cost-init">entrada al activo</div>
         </div>
-        <div class="result-card" style="padding:10px 12px;">
+        <div class="result-card">
           <div class="result-label">Costo anual</div>
-          <div class="result-val" id="res-cost-yr" style="font-size:1.1rem;">—</div>
-          <div class="result-sub" id="sub-cost-yr">gestión y mantenimiento</div>
+          <div class="result-val" id="res-cost-yr">—</div>
+          <div class="result-sub" id="sub-cost-yr">gestión / año</div>
         </div>
       </div>
 
-      <!-- Liquidez -->
-      <div class="bar-ind-title" style="margin-top:8px;">Liquidez</div>
-      <div class="bar-ind-label-row"><span>Difícil de acceder</span><span>Disponible rápido</span></div>
-      <div class="bar-bg"><div class="bar-fill" id="liq-bar" style="width:50%"></div></div>
-      <div class="bar-desc" id="liq-text">—</div>
+      <!-- Barras compactas -->
+      <div class="bar-block">
+        <div class="bar-ind-title">Liquidez</div>
+        <div class="bar-ind-label-row"><span>Difícil de acceder</span><span>Disponible rápido</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="liq-bar"></div></div>
+        <div class="bar-desc" id="liq-text">—</div>
+      </div>
 
-      <!-- Riesgo -->
-      <div class="bar-ind-title">Riesgo</div>
-      <div class="bar-ind-label-row"><span>Muy conservador</span><span>Muy volátil</span></div>
-      <div class="bar-bg"><div class="bar-fill" id="risk-bar" style="width:50%"></div></div>
-      <div class="bar-desc" id="risk-text">—</div>
+      <div class="bar-block">
+        <div class="bar-ind-title">Riesgo</div>
+        <div class="bar-ind-label-row"><span>Muy conservador</span><span>Muy volátil</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="risk-bar"></div></div>
+        <div class="bar-desc" id="risk-text">—</div>
+      </div>
 
-      <!-- Esfuerzo -->
-      <div class="bar-ind-title">Esfuerzo de gestión</div>
-      <div class="bar-ind-label-row"><span>Nada que hacer</span><span>Muy demandante</span></div>
-      <div class="bar-bg"><div class="bar-fill" id="effort-bar" style="width:50%"></div></div>
-      <div class="bar-desc" id="effort-text">—</div>
+      <div class="bar-block">
+        <div class="bar-ind-title">Esfuerzo de gestión</div>
+        <div class="bar-ind-label-row"><span>Nada que hacer</span><span>Muy demandante</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="effort-bar"></div></div>
+        <div class="bar-desc" id="effort-text">—</div>
+      </div>
     </div>
 
   </div>
