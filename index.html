@@ -189,6 +189,15 @@
 
   #sim { padding-top: 24px !important; padding-bottom: 24px !important; }
 
+  /* Simulator separator */
+  .sim-separator { background: #E8F4FD; padding: 52px 2rem; border-top: 3px solid #0288D1; border-bottom: 3px solid #0288D1; }
+  .sim-separator-inner { max-width: 920px; margin: 0 auto; }
+  .sim-sep-eyebrow { font-size: 11px; font-weight: 500; color: #0277BD; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+  .sim-sep-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; color: var(--ink); line-height: 1.2; margin-bottom: 16px; }
+  .sim-sep-desc { font-size: 0.95rem; color: var(--ink2); max-width: 560px; line-height: 1.75; margin-bottom: 24px; }
+  .sim-sep-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .sim-sep-pills span { background: rgba(2,136,209,0.10); border: 1px solid rgba(2,136,209,0.25); color: #01579B; font-size: 12px; font-weight: 500; padding: 6px 14px; border-radius: 20px; }
+
   #proj-reinvest::-webkit-slider-thumb { background: #2D6A4F; }
   #proj-years::-webkit-slider-thumb   { background: #2D6A4F; }
 
@@ -282,13 +291,37 @@
       <div class="var-icon">💸</div>
       <div class="var-title">Costo de operación</div>
       <div class="var-body">Lo que cuesta entrar, mantener y salir de cada inversión. Estos costos reducen la renta real y a veces son invisibles hasta que te los encontrás.</div>
-      <div class="var-example"><strong>Ladrillo:</strong> escribano, sellos, inmobiliaria (3–4% al comprar), expensas, mantenimiento, reparaciones, períodos vacíos. <strong>Instrumentos financieros:</strong> comisión del broker (0.2–0.5%), custodia anual (mínima). La diferencia es enorme.</div>
+      <div class="var-example"><strong>Ladrillo:</strong> escribano, sellos, inmobiliaria (~7.5% al comprar), expensas, mantenimiento, reparaciones, períodos vacíos. <strong>Instrumentos financieros:</strong> comisión del broker (0.2–0.5%), custodia anual (mínima). La diferencia es enorme.</div>
     </div>
     <div class="var-card">
       <div class="var-icon">🧠</div>
       <div class="var-title">Esfuerzo y costo emocional</div>
       <div class="var-body">Cuánto tiempo, atención y energía requiere cada opción. Algunas inversiones parecen pasivas pero generan trabajo invisible y estrés cotidiano.</div>
       <div class="var-example"><strong>Alquilar un depto:</strong> inquilinos, contratos, expensas, roturas, reuniones de consorcio, negociaciones. <strong>Bonos o fondos:</strong> una decisión inicial, revisión ocasional, ningún trámite cotidiano.</div>
+    </div>
+    <div class="var-card">
+      <div class="var-icon">🥚</div>
+      <div class="var-title">Diversificación</div>
+      <div class="var-body">No poner todos los huevos en la misma canasta. Distribuir el capital entre distintos tipos de activos reduce el impacto de que cualquiera de ellos falle — sin necesariamente reducir la renta total.</div>
+      <div class="var-example"><strong>Ejemplo:</strong> en 2001 quien tenía todo en bancos argentinos lo perdió. Quien tenía parte en bonos internacionales, parte en propiedades y parte en efectivo, sobrevivió mucho mejor. La diversificación no elimina el riesgo, pero lo reparte.</div>
+    </div>
+    <div class="var-card">
+      <div class="var-icon">⚖️</div>
+      <div class="var-title">Correlación entre activos</div>
+      <div class="var-body">Diversificar bien significa elegir activos que no caigan todos al mismo tiempo. Dos activos correlacionados reaccionan igual ante la misma crisis — tenerlos juntos no protege nada. La verdadera protección viene de mezclar activos que se comportan distinto.</div>
+      <div class="var-example"><strong>Ejemplo:</strong> tres departamentos en CABA tienen correlación casi perfecta entre sí — si el mercado inmobiliario cae, caen los tres. Pero un departamento más bonos del Tesoro EEUU tienen baja correlación: cuando el ladrillo porteño cayó 30% (2018–2022), los bonos americanos subieron.</div>
+    </div>
+    <div class="var-card">
+      <div class="var-icon">✂️</div>
+      <div class="var-title">Divisibilidad</div>
+      <div class="var-body">Algunos activos son bloques indivisibles: no se puede vender solo una habitación de un departamento. Los instrumentos financieros, en cambio, son divisibles: podés liquidar exactamente lo que necesitás, cuando lo necesitás.</div>
+      <div class="var-example"><strong>Ejemplo:</strong> si necesitás USD 15.000 urgente y tenés todo en un departamento de USD 200.000, tu única opción es vender el departamento entero — o no acceder al dinero. Si tenés bonos, vendés USD 15.000 en bonos y el resto sigue generando renta.</div>
+    </div>
+    <div class="var-card">
+      <div class="var-icon">📅</div>
+      <div class="var-title">Accesibilidad mensual a la renta</div>
+      <div class="var-body">Un alquiler entra todos los meses — eso es familiar y fácil de administrar. Los instrumentos financieros pagan en cuotas: cada 3, 6 o 12 meses según el instrumento. Eso no significa que el dinero "desaparece" — significa que hay que planificar un colchón de liquidez para cubrir los meses entre cobros.</div>
+      <div class="var-example"><strong>Solución práctica:</strong> mantener 3–6 meses de gastos en efectivo o plazo fijo de corto plazo. Así los cobros semestrales de bonos van a ese fondo, del cual se retira mensualmente. Es un paso más de planificación, pero no es complicado ni arriesgado.</div>
     </div>
   </div>
 
@@ -337,6 +370,14 @@
         <div class="myth-toggle">+</div>
       </div>
       <div class="myth-body">Los amigos conocen su propia experiencia, que puede ser muy diferente a la tuya. Quien compró un depto en 2015 y vendió en 2017 tiene una historia distinta al que compró en 2018. <strong>Lo que importa son los objetivos, el monto, la edad y la situación personal.</strong> Para eso existe el asesoramiento financiero profesional regulado por la CNV.</div>
+    </div>
+    <div class="myth-card" onclick="toggleMyth(this)">
+      <div class="myth-header">
+        <div class="myth-icon" style="background:#EDE7F6;color:#6A1B9A;">🤖</div>
+        <div class="myth-title">"ChatGPT me dijo que ponga todo en alquileres"</div>
+        <div class="myth-toggle">+</div>
+      </div>
+      <div class="myth-body">Las IAs generativas —incluyendo esta guía— no son asesores financieros. Tienen una tendencia conocida a <strong>confirmar lo que el usuario ya cree</strong>: si preguntás "¿es bueno invertir en propiedades?" probablemente recibas argumentos a favor, porque eso es lo que la pregunta sugiere que querés escuchar. Se llama sesgo de confirmación, y los modelos de lenguaje lo amplifican. Una IA no conoce tu situación real, tu edad, tus necesidades ni el mercado actualizado. <strong>Esta guía sirve para entender conceptos y comparar opciones — la decisión final siempre debe hacerse con un asesor humano regulado por la CNV.</strong></div>
     </div>
   </div>
 
@@ -468,16 +509,22 @@
 </div>
 </section>
 
-<div class="divider"></div>
+<div class="sim-separator">
+  <div class="sim-separator-inner">
+    <div class="sim-sep-eyebrow">05 — Herramienta interactiva</div>
+    <h2 class="sim-sep-title">Simulador de portafolio</h2>
+    <p class="sim-sep-desc">Ingresá tu capital disponible, distribuilo entre distintas opciones y observá en tiempo real cómo cambian la renta estimada, los costos, los riesgos y la proyección a futuro. Los números son orientativos — el objetivo es comparar, no predecir.</p>
+    <div class="sim-sep-pills">
+      <span>① Ingresá el capital</span>
+      <span>② Distribuí con las barritas</span>
+      <span>③ Observá las proyecciones</span>
+    </div>
+  </div>
+</div>
 
 <!-- SECTION 2: SIMULATOR -->
-<section id="sim" style="padding: 40px 2rem;">
+<section id="sim" style="padding: 24px 2rem 40px;">
 <div class="section-inner">
-
-  <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;">
-    <div class="section-label" style="margin-bottom:0;">05 — Simulador</div>
-    <span style="font-size:12px;color:var(--ink3);">Mové las barritas y los resultados se actualizan en tiempo real.</span>
-  </div>
 
   <div class="sim-layout">
 
@@ -558,6 +605,20 @@
         <div class="bar-ind-label-row"><span>Nada que hacer</span><span>Muy demandante</span></div>
         <div class="bar-bg"><div class="bar-fill" id="effort-bar"></div></div>
         <div class="bar-desc" id="effort-text">—</div>
+      </div>
+
+      <div class="bar-block">
+        <div class="bar-ind-title">Diversificación</div>
+        <div class="bar-ind-label-row"><span>Concentrada</span><span>Muy diversificada</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="div-bar"></div></div>
+        <div class="bar-desc" id="div-text">—</div>
+      </div>
+
+      <div class="bar-block">
+        <div class="bar-ind-title">Divisibilidad</div>
+        <div class="bar-ind-label-row"><span>Bloques indivisibles</span><span>Totalmente divisible</span></div>
+        <div class="bar-bg"><div class="bar-fill" id="divis-bar"></div></div>
+        <div class="bar-desc" id="divis-text">—</div>
       </div>
     </div>
 
@@ -830,13 +891,21 @@ function updateSim() {
   }
 
   const hasRenta = cap > 0 && totalYield > 0;
-  document.getElementById('res-monthly').textContent   = fmtRange(rMonthly, hasRenta);
-  document.getElementById('res-yearly').textContent    = fmtRange(rYearly, hasRenta);
+
+  // Net income = yield minus annual costs
+  const netYearly  = Math.max(0, totalYield - totalAnnualCost);
+  const netMonthly = netYearly / 12;
+  const rNetMonthly = range(netMonthly, weightedYieldVar);
+  const rNetYearly  = range(netYearly, weightedYieldVar);
+  const netYieldPct = cap > 0 ? (netYearly / cap) * 100 : 0;
+
+  document.getElementById('res-monthly').textContent   = fmtRange(rNetMonthly, hasRenta);
+  document.getElementById('res-yearly').textContent    = fmtRange(rNetYearly, hasRenta);
   document.getElementById('res-cost-init').textContent = cap > 0 ? fmtCostRange(rInitCost) : '—';
   document.getElementById('res-cost-yr').textContent   = cap > 0 ? fmtCostRange(rAnnCost) : '—';
 
-  document.getElementById('sub-monthly').textContent   = hasRenta ? yieldPct.toFixed(1) + '% anual del capital' : 'en USD aprox.';
-  document.getElementById('sub-yearly').textContent    = hasRenta ? yieldPct.toFixed(1) + '% del capital invertido' : 'sin tocar capital';
+  document.getElementById('sub-monthly').textContent   = hasRenta ? 'neto · ' + netYieldPct.toFixed(1) + '% anual del capital' : 'en USD aprox.';
+  document.getElementById('sub-yearly').textContent    = hasRenta ? 'neto · ' + netYieldPct.toFixed(1) + '% del capital' : 'sin tocar capital';
   document.getElementById('sub-cost-init').textContent = initPct ? initPct.toFixed(1) + '% del capital' : 'entrada al activo';
   document.getElementById('sub-cost-yr').textContent   = annPct ? annPct.toFixed(1) + '% del capital / año' : 'gestión / año';
 
@@ -892,7 +961,43 @@ function updateSim() {
 
   // Donut
   drawDonut(alloc, totalCosts, cap);
-}
+
+  // Diversification: inverse HHI (1 - sum of squared weights), normalized 0-1
+  // Only counts instruments with allocation > 0
+  let hhi = 0;
+  if (usedPct > 0) {
+    INSTRUMENTS.forEach(inst => {
+      const w = s[inst.key] / usedPct; // weight as fraction of allocated
+      hhi += w * w;
+    });
+  }
+  const diversification = usedPct > 0 ? 1 - hhi : 0; // 0 = fully concentrated, ~0.875 = perfectly even across 8
+
+  setBar('div', diversification, [
+    [0.15, '#B5532A', 'Muy concentrada — todo o casi todo en un solo tipo de activo. Si falla, falla todo.'],
+    [0.35, '#C4A44A', 'Poco diversificada — hay algo de variedad pero el peso sigue estando concentrado.'],
+    [0.55, '#8B6914', 'Moderada — hay distribución pero algunos instrumentos dominan mucho.'],
+    [0.72, '#2D6A4F', 'Buena — el capital está repartido en varios tipos de activos distintos.'],
+    [1.01, '#1B5E20', 'Muy diversificada — excelente distribución entre activos con distinta correlación.'],
+  ]);
+
+  // Divisibility: prop/vivir = 0 (indivisible), all others = 1
+  const DIVISIBILITY = { cash:1, plazo:1, vivir:0, prop:0, on:1, us:1, fci:1, cedear:1 };
+  let weightedDivisibility = 0;
+  if (usedPct > 0) {
+    INSTRUMENTS.forEach(inst => {
+      const w = s[inst.key] / usedPct;
+      weightedDivisibility += w * (DIVISIBILITY[inst.key] ?? 1);
+    });
+  }
+  setBar('divis', weightedDivisibility, [
+    [0.15, '#B5532A', 'Muy poco divisible — casi todo el capital está en activos que solo se pueden vender enteros.'],
+    [0.40, '#C4A44A', 'Poco divisible — predominan activos indivisibles. Acceder a una parte requiere vender todo.'],
+    [0.65, '#8B6914', 'Parcialmente divisible — mezcla de activos. Parte del capital es fraccionable, parte no.'],
+    [0.88, '#2D6A4F', 'Buena divisibilidad — la mayoría del capital se puede liquidar en el monto exacto necesario.'],
+    [1.01, '#1B5E20', 'Totalmente divisible — podés acceder exactamente a lo que necesitás, cuando lo necesitás.'],
+  ]);
+} // end updateSim
 
 function setBar(id, value, thresholds) {
   const bar = document.getElementById(id + '-bar');
@@ -1094,12 +1199,12 @@ function drawChart() {
 buildSliders();
 updateSim();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" onload="
+  drawChart();
+  const _orig = updateSim;
+  updateSim = function() { _orig(); drawChart(); };
+"></script>
 <script>
-// Draw chart once Chart.js is loaded, then re-draw on every updateSim
-const _origUpdateSim = updateSim;
-updateSim = function() { _origUpdateSim(); drawChart(); };
-drawChart();
 
 // Falling SVG bills
 (function() {
