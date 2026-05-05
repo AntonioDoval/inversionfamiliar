@@ -136,21 +136,6 @@
   .sim-remaining.ok { color: #2D6A4F; }
   .sim-remaining.over { color: #B5532A; }
 
-  /* Slider rows — single tight line */
-  .sim-row { margin-bottom: 6px; }
-  .sim-row-head { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
-  .sim-row-label { font-size: 11.5px; font-weight: 500; color: var(--ink); flex: 1; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sim-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .sim-row-vals { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-  .sim-pct { font-size: 11px; color: var(--ink3); min-width: 26px; text-align: right; }
-  .sim-amount-input {
-    font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500;
-    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
-    border-radius: 5px; padding: 2px 6px; width: 88px; text-align: right;
-    outline: none; transition: border-color .2s;
-  }
-  .sim-amount-input:focus { border-color: var(--ink2); }
-
   input[type="range"] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--bg2); border-radius: 2px; outline: none; cursor: pointer; }
   input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 1px 4px rgba(0,0,0,0.18); transition: transform .15s; }
   input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
@@ -188,6 +173,37 @@
   footer strong { color: var(--ink2); font-weight: 500; }
 
   #sim { padding-top: 24px !important; padding-bottom: 24px !important; }
+
+  /* Inline slider row */
+  .sim-row { margin-bottom: 5px; }
+  .sim-row-inline { display: flex; align-items: center; gap: 7px; }
+  .sim-row-name { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; color: var(--ink); min-width: 130px; flex-shrink: 0; white-space: nowrap; }
+  .sim-slider-inline { flex: 1; min-width: 60px; }
+  .sim-amount-input { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--ink); border-radius: 5px; padding: 2px 5px; width: 78px; text-align: right; outline: none; flex-shrink: 0; }
+  .sim-amount-input:focus { border-color: var(--ink2); }
+  .sim-pct { font-size: 10px; color: var(--ink3); min-width: 24px; text-align: right; flex-shrink: 0; }
+
+  /* Semaphore indicators */
+  .semaphore-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  @media (max-width: 600px) { .semaphore-grid { grid-template-columns: repeat(3, 1fr); } }
+  .sema-item { background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 10px; cursor: default; position: relative; transition: box-shadow .2s; }
+  .sema-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .sema-item:hover .sema-tooltip { display: block; }
+  .sema-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink3); margin-bottom: 5px; transition: background .3s; }
+  .sema-label { font-size: 9px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 3px; }
+  .sema-val { font-size: 12px; font-weight: 500; color: var(--ink2); transition: color .3s; }
+  .sema-tooltip { display: none; position: absolute; bottom: calc(100% + 6px); left: 0; right: 0; background: var(--ink); color: #fff; font-size: 11px; line-height: 1.5; padding: 8px 10px; border-radius: 7px; z-index: 10; white-space: normal; pointer-events: none; min-width: 160px; }
+  .sema-tooltip::after { content: ''; position: absolute; top: 100%; left: 16px; border: 5px solid transparent; border-top-color: var(--ink); }
+
+  /* Score general */
+  .score-general { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 4px 2px; border-radius: 10px; border: 1px solid var(--border2); padding: 14px 16px; transition: background .4s, border-color .4s; }
+  .score-left { flex: 1; }
+  .score-eyebrow { font-size: 10px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .score-label { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; transition: color .4s; }
+  .score-desc { font-size: 12px; color: var(--ink2); line-height: 1.55; max-width: 480px; }
+  .score-right { flex-shrink: 0; position: relative; }
+  .score-circle { position: relative; display: flex; align-items: center; justify-content: center; }
+  .score-num { position: absolute; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); transition: color .4s; }
 
   /* Simulator separator */
   .sim-separator { background: #E8F4FD; padding: 52px 2rem; border-top: 3px solid #0288D1; border-bottom: 3px solid #0288D1; }
@@ -585,43 +601,68 @@
         </div>
       </div>
 
-      <!-- Barras compactas -->
-      <div class="bar-block">
-        <div class="bar-ind-title">Liquidez</div>
-        <div class="bar-ind-label-row"><span>Difícil de acceder</span><span>Disponible rápido</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="liq-bar"></div></div>
-        <div class="bar-desc" id="liq-text">—</div>
-      </div>
+    </div>
 
-      <div class="bar-block">
-        <div class="bar-ind-title">Riesgo</div>
-        <div class="bar-ind-label-row"><span>Muy conservador</span><span>Muy volátil</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="risk-bar"></div></div>
-        <div class="bar-desc" id="risk-text">—</div>
-      </div>
+  </div>
 
-      <div class="bar-block">
-        <div class="bar-ind-title">Esfuerzo de gestión</div>
-        <div class="bar-ind-label-row"><span>Nada que hacer</span><span>Muy demandante</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="effort-bar"></div></div>
-        <div class="bar-desc" id="effort-text">—</div>
-      </div>
+  <!-- INDICADORES — full width below both panels -->
+  <div class="sim-panel" style="margin-top:14px;">
 
-      <div class="bar-block">
-        <div class="bar-ind-title">Diversificación</div>
-        <div class="bar-ind-label-row"><span>Concentrada</span><span>Muy diversificada</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="div-bar"></div></div>
-        <div class="bar-desc" id="div-text">—</div>
+    <!-- Score general — prominente -->
+    <div class="score-general" id="score-general">
+      <div class="score-left">
+        <div class="score-eyebrow">Evaluación general del portafolio</div>
+        <div class="score-label" id="score-label">—</div>
+        <div class="score-desc" id="score-desc">Distribuí el capital para ver la evaluación.</div>
       </div>
-
-      <div class="bar-block">
-        <div class="bar-ind-title">Divisibilidad</div>
-        <div class="bar-ind-label-row"><span>Bloques indivisibles</span><span>Totalmente divisible</span></div>
-        <div class="bar-bg"><div class="bar-fill" id="divis-bar"></div></div>
-        <div class="bar-desc" id="divis-text">—</div>
+      <div class="score-right">
+        <div class="score-circle" id="score-circle">
+          <svg viewBox="0 0 80 80" width="80" height="80">
+            <circle cx="40" cy="40" r="34" fill="none" stroke="var(--border2)" stroke-width="7"/>
+            <circle cx="40" cy="40" r="34" fill="none" id="score-arc"
+              stroke="#2D6A4F" stroke-width="7" stroke-linecap="round"
+              stroke-dasharray="213.6" stroke-dashoffset="213.6"
+              transform="rotate(-90 40 40)"
+              style="transition: stroke-dashoffset .6s ease, stroke .4s ease"/>
+          </svg>
+          <div class="score-num" id="score-num">—</div>
+        </div>
       </div>
     </div>
 
+    <!-- 5 semáforos en fila -->
+    <div class="semaphore-grid" id="semaphore-grid" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border2);">
+      <div class="sema-item">
+        <div class="sema-dot" id="sema-liq-dot"></div>
+        <div class="sema-label">Liquidez</div>
+        <div class="sema-val" id="sema-liq-val">—</div>
+        <div class="sema-tooltip" id="sema-liq-tip"></div>
+      </div>
+      <div class="sema-item">
+        <div class="sema-dot" id="sema-risk-dot"></div>
+        <div class="sema-label">Riesgo</div>
+        <div class="sema-val" id="sema-risk-val">—</div>
+        <div class="sema-tooltip" id="sema-risk-tip"></div>
+      </div>
+      <div class="sema-item">
+        <div class="sema-dot" id="sema-effort-dot"></div>
+        <div class="sema-label">Esfuerzo</div>
+        <div class="sema-val" id="sema-effort-val">—</div>
+        <div class="sema-tooltip" id="sema-effort-tip"></div>
+      </div>
+      <div class="sema-item">
+        <div class="sema-dot" id="sema-div-dot"></div>
+        <div class="sema-label">Diversificación</div>
+        <div class="sema-val" id="sema-div-val">—</div>
+        <div class="sema-tooltip" id="sema-div-tip"></div>
+      </div>
+      <div class="sema-item">
+        <div class="sema-dot" id="sema-divis-dot"></div>
+        <div class="sema-label">Divisibilidad</div>
+        <div class="sema-val" id="sema-divis-val">—</div>
+        <div class="sema-tooltip" id="sema-divis-tip"></div>
+      </div>
+    </div>
   </div>
 
   <!-- PROYECCIÓN A FUTURO -->
@@ -684,35 +725,35 @@
 <script>
 // ---- Data ----
 const INSTRUMENTS = [
-  { key: 'cash',  label: 'Efectivo / caja de seguridad', color: '#8B1A1A',
+  { key: 'cash',  label: 'Efectivo',           color: '#8B1A1A',
     yield: 0.000, initCost: 0.002, annualCost: 0.003, liq: 1.00, risk: 0.04, effort: 0.02,
     yieldVar: 0.00, costVar: 0.05 },
-  { key: 'plazo', label: 'Plazo fijo en USD',            color: '#6B6B6B',
+  { key: 'plazo', label: 'Plazo fijo',          color: '#6B6B6B',
     yield: 0.008, initCost: 0.001, annualCost: 0.001, liq: 0.55, risk: 0.10, effort: 0.05,
     yieldVar: 0.10, costVar: 0.10 },
-  { key: 'vivir', label: 'Propiedad para vivir',         color: '#B8860B',
+  { key: 'vivir', label: 'Propiedad p/vivir',   color: '#B8860B',
     yield: 0.000, initCost: 0.075, annualCost: 0.020, liq: 0.06, risk: 0.25, effort: 0.40,
     yieldVar: 0.00, costVar: 0.40 },
-  { key: 'prop',  label: 'Propiedad para alquilar',      color: '#8B6914',
+  { key: 'prop',  label: 'Propiedad p/alquiler',color: '#8B6914',
     yield: 0.040, initCost: 0.075, annualCost: 0.018, liq: 0.08, risk: 0.28, effort: 0.70,
     yieldVar: 0.30, costVar: 0.50 },
-  { key: 'on',    label: 'Obligaciones Negociables',     color: '#1565C0',
+  { key: 'on',    label: 'ONs',                 color: '#1565C0',
     yield: 0.075, initCost: 0.005, annualCost: 0.003, liq: 0.75, risk: 0.30, effort: 0.12,
     yieldVar: 0.20, costVar: 0.15 },
-  { key: 'us',    label: 'Bonos del Tesoro EEUU',        color: '#0288D1',
+  { key: 'us',    label: 'Bonos Tesoro EEUU',   color: '#0288D1',
     yield: 0.045, initCost: 0.002, annualCost: 0.001, liq: 0.95, risk: 0.05, effort: 0.05,
     yieldVar: 0.10, costVar: 0.10 },
-  { key: 'fci',   label: 'Fondos Comunes (FCI)',         color: '#00838F',
+  { key: 'fci',   label: 'Fondos Comunes',      color: '#00838F',
     yield: 0.065, initCost: 0.003, annualCost: 0.008, liq: 0.90, risk: 0.28, effort: 0.08,
     yieldVar: 0.25, costVar: 0.20 },
-  { key: 'cedear',label: 'CEDEARs',                      color: '#E65100',
+  { key: 'cedear',label: 'CEDEARs',             color: '#E65100',
     yield: 0.020, initCost: 0.005, annualCost: 0.004, liq: 0.85, risk: 0.65, effort: 0.50,
     yieldVar: 0.50, costVar: 0.25 },
 ];
 
 let totalCapital = 500000;
 
-// Build sliders
+// Build sliders — single horizontal line per instrument
 function buildSliders() {
   const container = document.getElementById('sliders-container');
   container.innerHTML = '';
@@ -720,19 +761,17 @@ function buildSliders() {
     const div = document.createElement('div');
     div.className = 'sim-row';
     div.innerHTML = `
-      <div class="sim-row-head">
-        <div class="sim-row-label">
+      <div class="sim-row-inline">
+        <div class="sim-row-name">
           <div class="sim-dot" style="background:${inst.color}"></div>
-          ${inst.label}
+          <span>${inst.label}</span>
         </div>
-        <div class="sim-row-vals">
-          <input class="sim-amount-input" type="text" id="amt-${inst.key}" value="0"
-            onchange="onAmountChange('${inst.key}', this)" />
-          <span class="sim-pct" id="pct-${inst.key}">0%</span>
-        </div>
+        <input type="range" id="sl-${inst.key}" min="0" max="100" value="0" step="1"
+          class="sim-slider-inline" oninput="onSliderChange('${inst.key}', this)">
+        <input class="sim-amount-input" type="text" id="amt-${inst.key}" value="0"
+          onchange="onAmountChange('${inst.key}', this)" />
+        <span class="sim-pct" id="pct-${inst.key}">0%</span>
       </div>
-      <input type="range" id="sl-${inst.key}" min="0" max="100" value="0" step="1"
-        oninput="onSliderChange('${inst.key}', this)">
     `;
     container.appendChild(div);
   });
@@ -937,77 +976,119 @@ function updateSim() {
   tintCard('card-cost-yr',   'res-cost-yr',   'sub-cost-yr',   annColor);
 
   // Bars
-  setBar('liq', weightedLiq, [
-    [0.20, '#B5532A', 'Muy baja — si surgiera una emergencia, acceder al dinero podría llevar meses.'],
-    [0.40, '#C4A44A', 'Baja — gran parte del capital está inmovilizado en activos difíciles de vender rápido.'],
-    [0.60, '#8B6914', 'Media — hay liquidez parcial, pero no todo está disponible de inmediato.'],
-    [0.80, '#2D6A4F', 'Buena — la mayoría del capital se puede recuperar en días si hace falta.'],
-    [1.01, '#1B5E20', 'Muy alta — casi todo el capital está disponible de inmediato.'],
+  setSema('liq', weightedLiq, [
+    [0.20, '#B5532A', 'Muy baja',   'Si surgiera una emergencia, acceder al dinero podría llevar meses.'],
+    [0.40, '#C4A44A', 'Baja',       'Gran parte del capital está inmovilizado en activos difíciles de vender rápido.'],
+    [0.60, '#8B6914', 'Media',      'Hay liquidez parcial, pero no todo está disponible de inmediato.'],
+    [0.80, '#2D6A4F', 'Buena',      'La mayoría del capital se puede recuperar en días si hace falta.'],
+    [1.01, '#1B5E20', 'Muy alta',   'Casi todo el capital está disponible de inmediato.'],
   ]);
-  setBar('risk', weightedRisk, [
-    [0.15, '#1B5E20', 'Muy conservadora — la variabilidad esperada es mínima. Ideal para quien prioriza estabilidad.'],
-    [0.30, '#2D6A4F', 'Conservadora — rendimientos relativamente estables con riesgo acotado.'],
-    [0.50, '#C4A44A', 'Moderada — puede haber variaciones en el ingreso según el mercado.'],
-    [0.70, '#E65100', 'Alta — parte del portafolio está expuesta a volatilidad significativa.'],
-    [1.01, '#B71C1C', 'Muy alta — fuerte exposición a activos volátiles. El capital puede fluctuar mucho.'],
+  setSema('risk', weightedRisk, [
+    [0.15, '#1B5E20', 'Muy bajo',   'La variabilidad esperada es mínima. Ideal para quien prioriza estabilidad.'],
+    [0.30, '#2D6A4F', 'Bajo',       'Rendimientos relativamente estables con riesgo acotado.'],
+    [0.50, '#C4A44A', 'Moderado',   'Puede haber variaciones en el ingreso según el mercado.'],
+    [0.70, '#E65100', 'Alto',       'Parte del portafolio está expuesta a volatilidad significativa.'],
+    [1.01, '#B71C1C', 'Muy alto',   'Fuerte exposición a activos volátiles. El capital puede fluctuar mucho.'],
   ]);
-  setBar('effort', weightedEffort, [
-    [0.10, '#1B5E20', 'Casi nulo — el portafolio no requiere gestión activa. Se puede olvidar y revisar ocasionalmente.'],
-    [0.25, '#2D6A4F', 'Bajo — alguna revisión periódica pero sin ocupación cotidiana.'],
-    [0.50, '#C4A44A', 'Medio — requiere atención ocasional: renovar contratos, seguir el mercado, tomar decisiones puntuales.'],
-    [0.75, '#E65100', 'Alto — demanda tiempo y atención regular. Gestión de inquilinos, seguimiento de activos, etc.'],
-    [1.01, '#B71C1C', 'Muy alto — ocupación constante. Puede convertirse en un segundo trabajo.'],
+  setSema('effort', weightedEffort, [
+    [0.10, '#1B5E20', 'Casi nulo',  'El portafolio no requiere gestión activa. Se puede revisar ocasionalmente.'],
+    [0.25, '#2D6A4F', 'Bajo',       'Alguna revisión periódica pero sin ocupación cotidiana.'],
+    [0.50, '#C4A44A', 'Medio',      'Requiere atención ocasional: contratos, mercado, decisiones puntuales.'],
+    [0.75, '#E65100', 'Alto',       'Demanda tiempo y atención regular. Gestión de inquilinos, activos, etc.'],
+    [1.01, '#B71C1C', 'Muy alto',   'Ocupación constante. Puede convertirse en un segundo trabajo.'],
   ]);
 
   // Donut
   drawDonut(alloc, totalCosts, cap);
 
-  // Diversification: inverse HHI (1 - sum of squared weights), normalized 0-1
-  // Only counts instruments with allocation > 0
   let hhi = 0;
-  if (usedPct > 0) {
-    INSTRUMENTS.forEach(inst => {
-      const w = s[inst.key] / usedPct; // weight as fraction of allocated
-      hhi += w * w;
-    });
-  }
-  const diversification = usedPct > 0 ? 1 - hhi : 0; // 0 = fully concentrated, ~0.875 = perfectly even across 8
-
-  setBar('div', diversification, [
-    [0.15, '#B5532A', 'Muy concentrada — todo o casi todo en un solo tipo de activo. Si falla, falla todo.'],
-    [0.35, '#C4A44A', 'Poco diversificada — hay algo de variedad pero el peso sigue estando concentrado.'],
-    [0.55, '#8B6914', 'Moderada — hay distribución pero algunos instrumentos dominan mucho.'],
-    [0.72, '#2D6A4F', 'Buena — el capital está repartido en varios tipos de activos distintos.'],
-    [1.01, '#1B5E20', 'Muy diversificada — excelente distribución entre activos con distinta correlación.'],
+  if (usedPct > 0) INSTRUMENTS.forEach(inst => { const w = s[inst.key]/usedPct; hhi += w*w; });
+  const diversification = usedPct > 0 ? 1 - hhi : 0;
+  setSema('div', diversification, [
+    [0.15, '#B5532A', 'Muy concentrada',    'Todo o casi todo en un solo tipo de activo. Si falla, falla todo.'],
+    [0.35, '#C4A44A', 'Poco diversificada', 'Hay variedad pero el peso sigue concentrado en pocos activos.'],
+    [0.55, '#8B6914', 'Moderada',           'Hay distribución pero algunos instrumentos dominan mucho.'],
+    [0.72, '#2D6A4F', 'Buena',              'El capital está repartido en varios tipos de activos distintos.'],
+    [1.01, '#1B5E20', 'Muy diversificada',  'Excelente distribución entre activos con distinta correlación.'],
   ]);
 
-  // Divisibility: prop/vivir = 0 (indivisible), all others = 1
   const DIVISIBILITY = { cash:1, plazo:1, vivir:0, prop:0, on:1, us:1, fci:1, cedear:1 };
   let weightedDivisibility = 0;
-  if (usedPct > 0) {
-    INSTRUMENTS.forEach(inst => {
-      const w = s[inst.key] / usedPct;
-      weightedDivisibility += w * (DIVISIBILITY[inst.key] ?? 1);
-    });
-  }
-  setBar('divis', weightedDivisibility, [
-    [0.15, '#B5532A', 'Muy poco divisible — casi todo el capital está en activos que solo se pueden vender enteros.'],
-    [0.40, '#C4A44A', 'Poco divisible — predominan activos indivisibles. Acceder a una parte requiere vender todo.'],
-    [0.65, '#8B6914', 'Parcialmente divisible — mezcla de activos. Parte del capital es fraccionable, parte no.'],
-    [0.88, '#2D6A4F', 'Buena divisibilidad — la mayoría del capital se puede liquidar en el monto exacto necesario.'],
-    [1.01, '#1B5E20', 'Totalmente divisible — podés acceder exactamente a lo que necesitás, cuando lo necesitás.'],
+  if (usedPct > 0) INSTRUMENTS.forEach(inst => { weightedDivisibility += (s[inst.key]/usedPct)*(DIVISIBILITY[inst.key]??1); });
+  setSema('divis', weightedDivisibility, [
+    [0.15, '#B5532A', 'Muy baja',  'Casi todo el capital está en activos que solo se pueden vender enteros.'],
+    [0.40, '#C4A44A', 'Baja',      'Predominan activos indivisibles. Acceder a una parte requiere vender todo.'],
+    [0.65, '#8B6914', 'Parcial',   'Mezcla de activos. Parte del capital es fraccionable, parte no.'],
+    [0.88, '#2D6A4F', 'Buena',     'La mayoría del capital se puede liquidar en el monto exacto necesario.'],
+    [1.01, '#1B5E20', 'Total',     'Podés acceder exactamente a lo que necesitás, cuando lo necesitás.'],
   ]);
+
+  // ---- Overall portfolio score ----
+  // Weights: riesgo 30% (inverted), liquidez 25%, diversificación 20%, esfuerzo 15% (inverted), divisibilidad 10%
+  if (usedPct > 0) {
+    const score = Math.round((
+      (1 - weightedRisk)   * 0.30 +
+      weightedLiq          * 0.25 +
+      diversification      * 0.20 +
+      (1 - weightedEffort) * 0.15 +
+      weightedDivisibility * 0.10
+    ) * 100);
+
+    const arc    = document.getElementById('score-arc');
+    const numEl  = document.getElementById('score-num');
+    const label  = document.getElementById('score-label');
+    const desc   = document.getElementById('score-desc');
+    const box    = document.getElementById('score-general');
+
+    const circumference = 213.6;
+    const offset = circumference - (score / 100) * circumference;
+    arc.style.strokeDashoffset = offset;
+
+    let color, labelTxt, descTxt;
+    if (score >= 75) {
+      color = '#1B5E20'; labelTxt = 'Portafolio sólido';
+      descTxt = 'Buena combinación de seguridad, liquidez y diversificación. Adecuado para preservar capital con renta estable.';
+    } else if (score >= 58) {
+      color = '#2D6A4F'; labelTxt = 'Portafolio equilibrado';
+      descTxt = 'Hay un balance razonable entre los indicadores. Podría mejorarse en alguna dimensión específica.';
+    } else if (score >= 42) {
+      color = '#C4A44A'; labelTxt = 'Portafolio moderado';
+      descTxt = 'Algunos indicadores muestran tensión. Vale la pena revisar la concentración y el nivel de riesgo.';
+    } else if (score >= 25) {
+      color = '#E65100'; labelTxt = 'Portafolio frágil';
+      descTxt = 'El portafolio tiene debilidades importantes. Alta concentración, riesgo elevado o poca liquidez.';
+    } else {
+      color = '#B71C1C'; labelTxt = 'Portafolio muy vulnerable';
+      descTxt = 'Combinación de activos de alto riesgo con poca protección. Difícil de gestionar y acceder en emergencias.';
+    }
+
+    arc.style.stroke   = color;
+    numEl.textContent  = score;
+    numEl.style.color  = color;
+    label.textContent  = labelTxt;
+    label.style.color  = color;
+    desc.textContent   = descTxt;
+    box.style.borderColor = color + '40';
+    box.style.background  = color + '0A';
+  } else {
+    document.getElementById('score-num').textContent  = '—';
+    document.getElementById('score-label').textContent = '—';
+    document.getElementById('score-desc').textContent  = 'Distribuí el capital para ver la evaluación.';
+    document.getElementById('score-arc').style.strokeDashoffset = '213.6';
+    document.getElementById('score-general').style.background = 'var(--bg)';
+    document.getElementById('score-general').style.borderColor = 'var(--border2)';
+  }
 } // end updateSim
 
-function setBar(id, value, thresholds) {
-  const bar = document.getElementById(id + '-bar');
-  const text = document.getElementById(id + '-text');
-  const pct = Math.round(value * 100);
-  bar.style.width = pct + '%';
-  for (const [limit, color, desc] of thresholds) {
+function setSema(id, value, thresholds) {
+  const dot = document.getElementById('sema-' + id + '-dot');
+  const val = document.getElementById('sema-' + id + '-val');
+  const tip = document.getElementById('sema-' + id + '-tip');
+  for (const [limit, color, label, desc] of thresholds) {
     if (value < limit) {
-      bar.style.background = color;
-      text.textContent = desc;
+      if (dot) dot.style.background = color;
+      if (val) { val.textContent = label; val.style.color = color; }
+      if (tip) tip.textContent = desc;
       break;
     }
   }
