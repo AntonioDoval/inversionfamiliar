@@ -35,13 +35,128 @@
   body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 400; line-height: 1.65; min-height: 100vh; }
 
   /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(247,244,239,0.92); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; padding: 0 2rem; height: 52px;
+  /* ---- NAVIGATION ---- */
+  .sidebar {
+    position: fixed; top: 0; left: 0; height: 100vh; width: 176px;
+    background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 0; z-index: 200;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.04);
   }
-  .nav-brand { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--ink); }
+  .sidebar-brand {
+    font-family: 'Playfair Display', serif; font-size: 0.82rem; font-weight: 600;
+    color: var(--ink); padding: 20px 16px 16px; line-height: 1.35;
+    border-bottom: 1px solid var(--border2);
+  }
+  .sidebar-links { display: flex; flex-direction: column; gap: 1px; padding: 10px 8px; }
+  .sidebar-links a {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; font-size: 12.5px; font-weight: 500;
+    color: var(--ink2); padding: 9px 10px; border-radius: 9px;
+    transition: all .18s;
+  }
+  .sidebar-links a svg { flex-shrink: 0; opacity: 0.7; transition: opacity .18s; }
+  .sidebar-links a:hover { background: var(--bg2); color: var(--ink); }
+  .sidebar-links a:hover svg { opacity: 1; }
+  .sidebar-links a.active { background: var(--ink); color: #fff; }
+  .sidebar-links a.active svg { opacity: 1; stroke: #fff; }
+  .page-content { margin-left: 176px; }
+
+  /* Bottom nav pill (mobile) */
+  .bottom-nav {
+    display: none; position: fixed; bottom: 0;
+    left: 0; right: 0;
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bottom-nav::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to top, rgba(247,244,239,0.95) 0%, rgba(247,244,239,0.7) 50%, rgba(247,244,239,0) 100%);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .bottom-nav-inner {
+    display: flex; align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 8px; gap: 2px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.06);
+    margin: 0 auto 14px;
+    width: fit-content;
+  }
+  .bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; text-decoration: none; color: var(--ink3);
+    font-size: 8.5px; font-weight: 500; letter-spacing: .02em;
+    padding: 6px 12px; border-radius: 100px; transition: all .18s;
+    white-space: nowrap; min-width: 52px;
+  }
+  .bottom-nav a svg { opacity: 0.55; transition: opacity .18s; }
+  .bottom-nav a:hover { color: var(--ink); background: var(--bg2); }
+  .bottom-nav a:hover svg { opacity: 1; }
+  .bottom-nav a.active { background: var(--ink); color: #fff; }
+  .bottom-nav a.active svg { opacity: 1; stroke: #fff; }
+
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .bottom-nav { display: block; }
+    .page-content { margin-left: 0; padding-bottom: 80px; }
+  }
+
+  /* ---- POPOVER ---- */
+  .popover-overlay {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.15); backdrop-filter: blur(1px);
+  }
+  .popover-overlay.open { display: block; }
+  .popover {
+    position: absolute; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; width: 260px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    z-index: 501;
+  }
+  .popover-title { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .popover-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .popover-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .popover-field label { font-size: 9px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 4px; }
+  .popover-field input {
+    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+    border: 1.5px solid var(--border); border-radius: 8px; padding: 6px 10px;
+    color: var(--ink); outline: none; text-align: center; transition: border-color .2s;
+  }
+  .popover-field input:focus { border-color: var(--ink); }
+  .popover-slider-wrap { margin-bottom: 14px; }
+  .popover-slider-wrap label { font-size: 9px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 6px; }
+  .popover-slider-wrap input[type="range"] { width: 100%; height: 5px; }
+  .popover-actions { display: flex; gap: 8px; }
+  .popover-btn-cancel { flex: 1; background: var(--bg2); border: none; border-radius: 7px; padding: 8px; font-size: 12px; font-weight: 500; color: var(--ink2); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .popover-btn-ok { flex: 1; background: var(--ink); border: none; border-radius: 7px; padding: 8px; font-size: 12px; font-weight: 500; color: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .popover-btn-cancel:hover { background: var(--border); }
+  .popover-btn-ok:hover { background: #333; }
+
+  /* Sim row with slider + chip */
+  .sim-row { margin-bottom: 6px; }
+  .sim-row-inline { display: flex; align-items: center; gap: 8px; }
+  .sim-row-name { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; color: var(--ink); min-width: 128px; flex-shrink: 0; }
+  .sim-slider-inline { flex: 1; min-width: 60px; }
+  .sim-val-chip {
+    flex-shrink: 0; display: flex; align-items: center; gap: 4px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 3px 8px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    color: var(--ink2); white-space: nowrap; transition: all .15s;
+    min-width: 80px; justify-content: center;
+  }
+  .sim-val-chip:hover { background: var(--surface); border-color: var(--ink3); color: var(--ink); }
+  .chip-sep { color: var(--ink3); font-size: 9px; }
 
   /* HERO */
   .hero { padding: 72px 2rem 56px; max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
@@ -79,7 +194,7 @@
   .var-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 48px; }
   @media (max-width: 500px) { .var-grid { grid-template-columns: 1fr; } }
   .var-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; }
-  .var-icon { font-size: 22px; margin-bottom: 12px; }
+  .var-icon { width: 32px; height: 32px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg2); border-radius: 8px; color: var(--ink2); flex-shrink: 0; }
   .var-title { font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
   .var-body { font-size: 13px; color: var(--ink2); line-height: 1.65; }
   .var-example { margin-top: 10px; background: var(--bg2); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--ink2); line-height: 1.6; }
@@ -90,7 +205,7 @@
   .myth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; transition: box-shadow .2s; }
   .myth-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.06); }
   .myth-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; }
-  .myth-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: #FDEBD0; color: #B5532A; }
+  .myth-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #FDEBD0; color: #B5532A; }
   .myth-title { font-size: 13.5px; font-weight: 500; color: var(--ink); flex: 1; }
   .myth-toggle { font-size: 20px; color: var(--ink3); transition: transform .3s; line-height: 1; }
   .myth-card.open .myth-toggle { transform: rotate(45deg); }
@@ -174,15 +289,6 @@
 
   #sim { padding-top: 24px !important; padding-bottom: 24px !important; }
 
-  /* Inline slider row */
-  .sim-row { margin-bottom: 5px; }
-  .sim-row-inline { display: flex; align-items: center; gap: 7px; }
-  .sim-row-name { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; color: var(--ink); min-width: 130px; flex-shrink: 0; white-space: nowrap; }
-  .sim-slider-inline { flex: 1; min-width: 60px; }
-  .sim-amount-input { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--ink); border-radius: 5px; padding: 2px 5px; width: 78px; text-align: right; outline: none; flex-shrink: 0; }
-  .sim-amount-input:focus { border-color: var(--ink2); }
-  .sim-pct { font-size: 10px; color: var(--ink3); min-width: 24px; text-align: right; flex-shrink: 0; }
-
   /* Semaphore indicators */
   .semaphore-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
   @media (max-width: 600px) { .semaphore-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -204,6 +310,30 @@
   .score-right { flex-shrink: 0; position: relative; }
   .score-circle { position: relative; display: flex; align-items: center; justify-content: center; }
   .score-num { position: absolute; font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink); transition: color .4s; }
+
+  /* Sim column headers */
+  .sim-col-headers { display: flex; gap: 7px; align-items: center; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid var(--border2); }
+  .sim-col-h-name { font-size: 9px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; flex: 1; min-width: 130px; }
+  .sim-col-h-field { font-size: 9px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; width: 72px; text-align: right; }
+  .sim-col-h-pct   { font-size: 9px; color: var(--ink3); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; width: 52px; text-align: right; }
+  .sim-miles-input, .sim-pct-input {
+    font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 500;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+    border-radius: 5px; padding: 3px 6px; text-align: right; outline: none;
+    transition: border-color .2s;
+  }
+  .sim-miles-input:focus, .sim-pct-input:focus { border-color: var(--ink2); }
+  .sim-miles-input { width: 72px; }
+  .sim-pct-input   { width: 52px; }
+
+  /* Accountability */
+  .accountability { background: var(--bg2); border-top: 1px solid var(--border); padding: 32px 2rem; }
+  .accountability-inner { max-width: 920px; margin: 0 auto; }
+  .acc-title { font-size: 10px; font-weight: 500; color: var(--ink3); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+  .acc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+  @media (max-width: 640px) { .acc-grid { grid-template-columns: 1fr; } }
+  .acc-grid p { font-size: 11px; color: var(--ink3); line-height: 1.65; }
+  .acc-grid p strong { color: var(--ink2); font-weight: 500; }
 
   /* Simulator separator */
   .sim-separator { background: #E8F4FD; padding: 52px 2rem; border-top: 3px solid #0288D1; border-bottom: 3px solid #0288D1; }
@@ -238,19 +368,98 @@
     .result-grid { grid-template-columns: 1fr !important; }
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
 </head>
 <body>
 
-<nav>
-  <div class="nav-brand">Tu plata, tus decisiones</div>
+<!-- SIDEBAR (desktop) -->
+<aside class="sidebar">
+  <div class="sidebar-brand">Tu plata,<br>tus decisiones</div>
+  <nav class="sidebar-links">
+    <a href="#objetivos" onclick="setActive(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Objetivos
+    </a>
+    <a href="#variables" onclick="setActive(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Variables
+    </a>
+    <a href="#mitos" onclick="setActive(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mitos
+    </a>
+    <a href="#opciones" onclick="setActive(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Opciones
+    </a>
+    <a href="#sim" onclick="setActive(this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Simulador
+    </a>
+  </nav>
+</aside>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="#objetivos" onclick="setBotActive(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      Objetivos
+    </a>
+    <a href="#variables" onclick="setBotActive(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Variables
+    </a>
+    <a href="#mitos" onclick="setBotActive(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Mitos
+    </a>
+    <a href="#opciones" onclick="setBotActive(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      Opciones
+    </a>
+    <a href="#sim" onclick="setBotActive(this)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Simul.
+    </a>
+  </div>
 </nav>
+
+<!-- POPOVER OVERLAY -->
+<div class="popover-overlay" id="popover-overlay" onclick="closePopover()">
+  <div class="popover" id="popover-box" onclick="event.stopPropagation()">
+    <div class="popover-title">
+      <div class="popover-dot" id="pop-dot"></div>
+      <span id="pop-title">Instrumento</span>
+    </div>
+    <div class="popover-fields">
+      <div class="popover-field">
+        <label>Miles USD</label>
+        <input type="number" id="pop-miles" min="0" step="1" oninput="popSyncFromMiles()">
+      </div>
+      <div class="popover-field">
+        <label>Porcentaje</label>
+        <input type="number" id="pop-pct" min="0" max="100" step="0.1" oninput="popSyncFromPct()">
+      </div>
+    </div>
+    <div class="popover-slider-wrap">
+      <label>Ajuste fino (0–100%)</label>
+      <input type="range" id="pop-slider" min="0" max="100" step="1" oninput="popSyncFromSlider()">
+    </div>
+    <div class="popover-actions">
+      <button class="popover-btn-cancel" onclick="closePopover()">Cancelar</button>
+      <button class="popover-btn-ok" onclick="confirmPopover()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-content">
 
 <div style="position:relative;">
 <div class="hero-bg" id="hero-bg"></div>
 <div class="hero anim">
-  <div class="hero-tag">Para decidir con información</div>
-  <h1>¿Qué hago con<br><em>esta plata?</em></h1>
-  <p>Una guía honesta para entender las opciones, sin tecnicismos innecesarios. Primero entendemos las variables clave, después jugamos con los números.</p>
+  <h1>¿Qué hacer con<br><em>la plata?</em></h1>
+  <p>Una guía honesta para entender las opciones, sin tecnicismos innecesarios. Primero entendemos las variables clave, después exploramos y comparamos alternativas con números reales.</p>
 </div>
 </div>
 
@@ -258,7 +467,7 @@
 <section id="aprende">
 <div class="section-inner">
 
-  <div class="section-label">01 — Objetivos</div>
+  <div class="section-label" id="objetivos">01 — Objetivos</div>
   <div class="section-title">Toda inversión busca<br>al menos una de estas cosas</div>
   <div class="section-sub">Antes de hablar de opciones concretas, hay que saber qué se quiere lograr. No todas las opciones sirven para todo.</div>
 
@@ -286,55 +495,55 @@
   </div>
 
   <!-- VARIABLES CLAVE -->
-  <div class="section-label">02 — Variables clave</div>
-  <div class="section-title">Cuatro cosas que hay que<br>mirar en cualquier opción</div>
-  <div class="section-sub" style="margin-bottom: 28px;">Cada opción de inversión se puede evaluar con estas cuatro dimensiones. Más adelante las vas a ver en el simulador.</div>
+  <div class="section-label" id="variables">02 — Variables clave</div>
+  <div class="section-title">Algunas cosas clave que mirar<br>en cualquier opción</div>
+  <div class="section-sub" style="margin-bottom: 28px;">Cada opción de inversión se puede evaluar con estas variables. Más adelante las vas a ver en el simulador.</div>
 
   <div class="var-grid">
     <div class="var-card">
-      <div class="var-icon">📊</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div class="var-title">Riesgo</div>
       <div class="var-body">La posibilidad de que el capital o la renta valgan menos de lo esperado. No siempre implica "perder todo" — puede ser una baja temporal o una renta variable.</div>
       <div class="var-example"><strong>Ejemplo:</strong> un bono del Tesoro de EEUU tiene riesgo casi nulo. Una acción de una empresa emergente puede bajar 50% en un año. Un departamento en CABA bajó 30% en dólares entre 2018 y 2022.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">💧</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
       <div class="var-title">Liquidez</div>
       <div class="var-body">Qué tan rápido podés convertir la inversión en efectivo si lo necesitás. Un activo poco líquido no es malo — pero si surge una emergencia, puede ser un problema.</div>
       <div class="var-example"><strong>Ejemplo:</strong> vender un departamento puede llevar 3 a 12 meses. Vender un bono en el mercado puede hacerse en un día hábil. El efectivo en caja de seguridad es inmediato.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">💸</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
       <div class="var-title">Costo de operación</div>
       <div class="var-body">Lo que cuesta entrar, mantener y salir de cada inversión. Estos costos reducen la renta real y a veces son invisibles hasta que te los encontrás.</div>
       <div class="var-example"><strong>Ladrillo:</strong> escribano, sellos, inmobiliaria (~7.5% al comprar), expensas, mantenimiento, reparaciones, períodos vacíos. <strong>Instrumentos financieros:</strong> comisión del broker (0.2–0.5%), custodia anual (mínima). La diferencia es enorme.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">🧠</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
       <div class="var-title">Esfuerzo y costo emocional</div>
       <div class="var-body">Cuánto tiempo, atención y energía requiere cada opción. Algunas inversiones parecen pasivas pero generan trabajo invisible y estrés cotidiano.</div>
       <div class="var-example"><strong>Alquilar un depto:</strong> inquilinos, contratos, expensas, roturas, reuniones de consorcio, negociaciones. <strong>Bonos o fondos:</strong> una decisión inicial, revisión ocasional, ningún trámite cotidiano.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">🥚</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
       <div class="var-title">Diversificación</div>
       <div class="var-body">No poner todos los huevos en la misma canasta. Distribuir el capital entre distintos tipos de activos reduce el impacto de que cualquiera de ellos falle — sin necesariamente reducir la renta total.</div>
       <div class="var-example"><strong>Ejemplo:</strong> en 2001 quien tenía todo en bancos argentinos lo perdió. Quien tenía parte en bonos internacionales, parte en propiedades y parte en efectivo, sobrevivió mucho mejor. La diversificación no elimina el riesgo, pero lo reparte.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">⚖️</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg></div>
       <div class="var-title">Correlación entre activos</div>
       <div class="var-body">Diversificar bien significa elegir activos que no caigan todos al mismo tiempo. Dos activos correlacionados reaccionan igual ante la misma crisis — tenerlos juntos no protege nada. La verdadera protección viene de mezclar activos que se comportan distinto.</div>
       <div class="var-example"><strong>Ejemplo:</strong> tres departamentos en CABA tienen correlación casi perfecta entre sí — si el mercado inmobiliario cae, caen los tres. Pero un departamento más bonos del Tesoro EEUU tienen baja correlación: cuando el ladrillo porteño cayó 30% (2018–2022), los bonos americanos subieron.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">✂️</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></div>
       <div class="var-title">Divisibilidad</div>
       <div class="var-body">Algunos activos son bloques indivisibles: no se puede vender solo una habitación de un departamento. Los instrumentos financieros, en cambio, son divisibles: podés liquidar exactamente lo que necesitás, cuando lo necesitás.</div>
       <div class="var-example"><strong>Ejemplo:</strong> si necesitás USD 15.000 urgente y tenés todo en un departamento de USD 200.000, tu única opción es vender el departamento entero — o no acceder al dinero. Si tenés bonos, vendés USD 15.000 en bonos y el resto sigue generando renta.</div>
     </div>
     <div class="var-card">
-      <div class="var-icon">📅</div>
+      <div class="var-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <div class="var-title">Accesibilidad mensual a la renta</div>
       <div class="var-body">Un alquiler entra todos los meses — eso es familiar y fácil de administrar. Los instrumentos financieros pagan en cuotas: cada 3, 6 o 12 meses según el instrumento. Eso no significa que el dinero "desaparece" — significa que hay que planificar un colchón de liquidez para cubrir los meses entre cobros.</div>
       <div class="var-example"><strong>Solución práctica:</strong> mantener 3–6 meses de gastos en efectivo o plazo fijo de corto plazo. Así los cobros semestrales de bonos van a ese fondo, del cual se retira mensualmente. Es un paso más de planificación, pero no es complicado ni arriesgado.</div>
@@ -342,14 +551,14 @@
   </div>
 
   <!-- MITOS -->
-  <div class="section-label" style="margin-top: 8px;">03 — Mitos frecuentes</div>
+  <div class="section-label" id="mitos" style="margin-top: 8px;">03 — Mitos frecuentes</div>
   <div class="section-title">Lo que suele escucharse<br>y lo que hay detrás</div>
   <div class="section-sub" style="margin-bottom: 24px;">Las anécdotas de "perdí todo" suelen tener una explicación muy concreta.</div>
 
   <div class="myth-grid">
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon">⚠</div>
+        <div class="myth-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
         <div class="myth-title">"Un amigo invirtió y lo perdió todo"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -357,7 +566,7 @@
     </div>
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon">🏠</div>
+        <div class="myth-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
         <div class="myth-title">"El ladrillo siempre sube y nunca pierde"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -365,7 +574,7 @@
     </div>
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon">📈</div>
+        <div class="myth-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
         <div class="myth-title">"Invertir en bolsa es especular y apostar"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -373,7 +582,7 @@
     </div>
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon">🏦</div>
+        <div class="myth-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><rect x="2" y="11" width="20" height="11" rx="2"/><path d="M12 2L2 11h20L12 2z"/></svg></div>
         <div class="myth-title">"Los bancos son seguros, el resto no"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -381,7 +590,7 @@
     </div>
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon">💬</div>
+        <div class="myth-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <div class="myth-title">"Mis amigos dicen que lo mejor es tal cosa"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -389,7 +598,7 @@
     </div>
     <div class="myth-card" onclick="toggleMyth(this)">
       <div class="myth-header">
-        <div class="myth-icon" style="background:#EDE7F6;color:#6A1B9A;">🤖</div>
+        <div class="myth-icon" style="background:#EDE7F6;color:#6A1B9A;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 2a3 3 0 0 1 3 3v6H9V5a3 3 0 0 1 3-3z"/><line x1="8" y1="21" x2="8" y2="17"/><line x1="16" y1="21" x2="16" y2="17"/><circle cx="9" cy="15" r="0.5" fill="currentColor"/><circle cx="15" cy="15" r="0.5" fill="currentColor"/></svg></div>
         <div class="myth-title">"ChatGPT me dijo que ponga todo en alquileres"</div>
         <div class="myth-toggle">+</div>
       </div>
@@ -398,7 +607,7 @@
   </div>
 
   <!-- INSTRUMENTOS -->
-  <div class="section-label" style="margin-top: 56px;">04 — Opciones concretas</div>
+  <div class="section-label" id="opciones" style="margin-top: 56px;">04 — Opciones concretas</div>
   <div class="section-title">Las alternativas de menor<br>a mayor riesgo</div>
   <div class="section-sub" style="margin-bottom: 28px;">De izquierda a derecha, las opciones van aumentando en riesgo potencial. Las primeras son más conservadoras; las últimas, más volátiles.</div>
 
@@ -532,8 +741,8 @@
     <p class="sim-sep-desc">Ingresá tu capital disponible, distribuilo entre distintas opciones y observá en tiempo real cómo cambian la renta estimada, los costos, los riesgos y la proyección a futuro. Los números son orientativos — el objetivo es comparar, no predecir.</p>
     <div class="sim-sep-pills">
       <span>① Ingresá el capital</span>
-      <span>② Distribuí con las barritas</span>
-      <span>③ Observá las proyecciones</span>
+      <span>② Distribuí entre opciones</span>
+      <span>③ Analizá proyecciones y riesgos</span>
     </div>
   </div>
 </div>
@@ -547,8 +756,8 @@
     <!-- LEFT: capital + sliders -->
     <div class="sim-panel" id="sliders-panel">
 
-      <!-- Capital + badge en una línea -->
-      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border2);">
+      <!-- Capital + badge -->
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border2);">
         <span style="font-size:10px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Capital USD $</span>
         <input class="capital-input" type="text" id="capital-field" value="500.000" maxlength="12" oninput="onCapitalInput(this)" />
         <span class="sim-remaining ok" id="remaining-badge" style="margin-left:auto;">✓ ok</span>
@@ -564,7 +773,7 @@
         <div class="costs-row-val" id="costs-auto-val">USD 0</div>
       </div>
 
-      <div class="sim-alert" id="alert-over">⚠ La suma supera el 100%. Bajá alguna barrita.</div>
+      <div class="sim-alert" id="alert-over">⚠ La suma supera el 100%. Ajustá los valores.</div>
     </div>
 
     <!-- RIGHT: donut + proyecciones -->
@@ -718,6 +927,23 @@
   </div>
 </div>
 
+
+<div class="accountability">
+  <div class="accountability-inner">
+    <div class="acc-title">Metodología y criterios del simulador</div>
+    <div class="acc-grid">
+      <p><strong>Rendimientos utilizados.</strong> Efectivo: 0%. Plazo fijo USD: 0.8% anual (mercado argentino actual). Propiedad para alquilar: 4% anual bruto en USD (promedio CABA, estimación conservadora). Obligaciones Negociables: 7.5% anual en USD (rango de mercado actual para ONs corporativas argentinas de grado medio). Bonos del Tesoro EEUU: 4.5% anual (rango 2024–2025). Fondos Comunes: 6.5% anual en USD (promedio de FCIs conservadores en dólares). CEDEARs: 2% anual (estimación simbólica — el retorno real es por apreciación de capital, no por renta predecible).</p>
+      <p><strong>Costos de operación.</strong> Propiedades (compra y alquiler): costo de entrada 7.5% (escribano, sellos, inmobiliaria, gastos varios — estimación para CABA); costo anual 1.8–2% (expensas, mantenimiento, vacancia). Instrumentos financieros: entrada 0.2–0.5% (comisión broker); anual 0.1–0.8% (custodia, administración). Los costos de propiedad para vivir consideran solo gastos sin renta.</p>
+      <p><strong>Rangos de variabilidad.</strong> Cada instrumento tiene un factor de varianza (yieldVar) que determina el ancho del rango mostrado en las proyecciones: Efectivo 0%, Plazo fijo 10%, Tesoro EEUU 10%, ONs 20%, FCI 25%, Prop. alquiler 30%, CEDEARs 50%. El rango de renta es simétrico; el de costos es asimétrico (1.6× hacia arriba) para reflejar que los gastos inesperados tienden a superar el mínimo pero raramente lo reducen.</p>
+      <p><strong>Indicadores del portafolio.</strong> Liquidez, riesgo, esfuerzo y divisibilidad son promedios ponderados por asignación de valores predefinidos por instrumento. Diversificación usa el índice de Herfindahl-Hirschman inverso (1 − Σwᵢ²), normalizado entre 0 y 1. El score general pondera: riesgo invertido 30%, liquidez 25%, diversificación 20%, esfuerzo invertido 15%, divisibilidad 10%.</p>
+      <p><strong>Proyección a futuro.</strong> Simulación año a año con reinversión del porcentaje elegido. El eje Y muestra ganancia porcentual sobre el capital inicial con techo fijo según horizonte: 150% (≤10 años), 400% (≤25 años), 1000% (≤50 años). No contempla inflación en dólares, cambios de portafolio en el tiempo, ni eventos de mercado extraordinarios.</p>
+      <p><strong>Limitaciones generales.</strong> Este simulador es una herramienta educativa orientativa. Los rendimientos pasados no garantizan rendimientos futuros. Los valores utilizados son aproximaciones basadas en condiciones de mercado a 2024–2025 y pueden variar significativamente. No constituye asesoramiento financiero. Antes de tomar decisiones de inversión, consultá con un asesor regulado por la Comisión Nacional de Valores (CNV) de Argentina.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end page-content -->
+
 <footer>
   Preparado para facilitar una conversación familiar. No constituye asesoramiento financiero. <strong>Consultá siempre con un asesor regulado por la CNV.</strong>
 </footer>
@@ -753,7 +979,7 @@ const INSTRUMENTS = [
 
 let totalCapital = 500000;
 
-// Build sliders — single horizontal line per instrument
+// Build rows — slider + clickable value chip
 function buildSliders() {
   const container = document.getElementById('sliders-container');
   container.innerHTML = '';
@@ -767,21 +993,108 @@ function buildSliders() {
           <span>${inst.label}</span>
         </div>
         <input type="range" id="sl-${inst.key}" min="0" max="100" value="0" step="1"
-          class="sim-slider-inline" oninput="onSliderChange('${inst.key}', this)">
-        <input class="sim-amount-input" type="text" id="amt-${inst.key}" value="0"
-          onchange="onAmountChange('${inst.key}', this)" />
-        <span class="sim-pct" id="pct-${inst.key}">0%</span>
+          class="sim-slider-inline" oninput="onSliderChange('${inst.key}')">
+        <button class="sim-val-chip" id="chip-${inst.key}"
+          onclick="openPopover('${inst.key}')"
+          title="Click para editar">
+          <span id="chip-miles-${inst.key}">0k</span>
+          <span class="chip-sep">·</span>
+          <span id="chip-pct-${inst.key}">0%</span>
+        </button>
       </div>
     `;
     container.appendChild(div);
   });
 
+  // Thumb colors
   const style = document.createElement('style');
   INSTRUMENTS.forEach(inst => {
-    style.textContent += `#sl-${inst.key}::-webkit-slider-thumb { background: ${inst.color}; }`;
+    style.textContent += `#sl-${inst.key}::-webkit-slider-thumb{background:${inst.color};}`;
   });
   document.head.appendChild(style);
 }
+
+// ---- Popover state ----
+let popKey = null;
+
+function openPopover(key) {
+  popKey = key;
+  const inst = INSTRUMENTS.find(i => i.key === key);
+  const sl   = document.getElementById('sl-' + key);
+  const pct  = parseFloat(sl.value) || 0;
+  const miles = totalCapital > 0 ? (pct / 100) * totalCapital / 1000 : 0;
+
+  document.getElementById('pop-dot').style.background = inst.color;
+  document.getElementById('pop-title').textContent = inst.label;
+  document.getElementById('pop-miles').value  = miles.toFixed(1);
+  document.getElementById('pop-pct').value    = pct.toFixed(1);
+  document.getElementById('pop-slider').value = pct;
+
+  // Style popover slider thumb
+  let ps = document.getElementById('pop-slider-style');
+  if (!ps) { ps = document.createElement('style'); ps.id = 'pop-slider-style'; document.head.appendChild(ps); }
+  ps.textContent = `#pop-slider::-webkit-slider-thumb{background:${inst.color};}`;
+
+  // Position popover near chip
+  const chip   = document.getElementById('chip-' + key);
+  const rect   = chip.getBoundingClientRect();
+  const pop    = document.getElementById('popover-box');
+  const ov     = document.getElementById('popover-overlay');
+  ov.classList.add('open');
+
+  // After display, position it
+  requestAnimationFrame(() => {
+    const pw = pop.offsetWidth, ph = pop.offsetHeight;
+    let top  = rect.bottom + 8 + window.scrollY;
+    let left = rect.left + window.scrollX;
+    if (left + pw > window.innerWidth - 12) left = window.innerWidth - pw - 12;
+    if (top + ph > window.scrollY + window.innerHeight - 12) top = rect.top + window.scrollY - ph - 8;
+    pop.style.top  = top + 'px';
+    pop.style.left = left + 'px';
+  });
+}
+
+function closePopover() {
+  document.getElementById('popover-overlay').classList.remove('open');
+  popKey = null;
+}
+
+function confirmPopover() {
+  if (!popKey) return;
+  const pct = Math.min(100, Math.max(0, parseFloat(document.getElementById('pop-pct').value) || 0));
+  document.getElementById('sl-' + popKey).value = pct;
+  onSliderChange(popKey);
+  closePopover();
+}
+
+function popSyncFromMiles() {
+  const miles = parseFloat(document.getElementById('pop-miles').value) || 0;
+  const pct   = totalCapital > 0 ? Math.min(100, (miles * 1000 / totalCapital) * 100) : 0;
+  document.getElementById('pop-pct').value    = pct.toFixed(1);
+  document.getElementById('pop-slider').value = pct;
+}
+
+function popSyncFromPct() {
+  const pct   = Math.min(100, Math.max(0, parseFloat(document.getElementById('pop-pct').value) || 0));
+  const miles = totalCapital > 0 ? (pct / 100) * totalCapital / 1000 : 0;
+  document.getElementById('pop-miles').value  = miles.toFixed(1);
+  document.getElementById('pop-slider').value = pct;
+}
+
+function popSyncFromSlider() {
+  const pct   = parseFloat(document.getElementById('pop-slider').value) || 0;
+  const miles = totalCapital > 0 ? (pct / 100) * totalCapital / 1000 : 0;
+  document.getElementById('pop-pct').value   = pct.toFixed(1);
+  document.getElementById('pop-miles').value = miles.toFixed(1);
+}
+
+// Confirm on Enter in popover inputs
+['pop-miles','pop-pct'].forEach(id => {
+  document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') confirmPopover(); });
+  });
+});
 
 // Capital input
 function onCapitalInput(el) {
@@ -789,46 +1102,42 @@ function onCapitalInput(el) {
   const num = Math.min(parseInt(raw) || 0, 100000000);
   el.value = num ? num.toLocaleString('es-AR') : '';
   totalCapital = num;
-  // Recalculate amounts from current pct slider values
   INSTRUMENTS.forEach(inst => {
     const sl = document.getElementById('sl-' + inst.key);
-    const amtEl = document.getElementById('amt-' + inst.key);
-    if (sl && amtEl) {
-      const pct = +sl.value;
-      const amt = Math.round((pct / 100) * totalCapital / 1000) * 1000;
-      amtEl.value = fmt(amt);
-    }
+    if (sl) onSliderChange(inst.key);
   });
   updateSim();
 }
 
-// Slider moved → update amount field
-function onSliderChange(key, el) {
-  const pct = +el.value;
-  const amt = Math.round((pct / 100) * totalCapital / 1000) * 1000;
-  const amtEl = document.getElementById('amt-' + key);
-  if (amtEl) amtEl.value = fmt(amt);
-  updateSim();
-}
-
-// Amount typed → update slider
-function onAmountChange(key, el) {
-  const raw = el.value.replace(/\D/g, '');
-  let num = Math.min(parseInt(raw) || 0, totalCapital);
-  num = Math.round(num / 1000) * 1000; // snap to 1000
-  el.value = fmt(num);
-  const pct = totalCapital > 0 ? Math.round((num / totalCapital) * 100) : 0;
-  const sl = document.getElementById('sl-' + key);
-  if (sl) sl.value = Math.min(pct, 100);
+// Slider changed → update chip display
+function onSliderChange(key) {
+  const sl   = document.getElementById('sl-' + key);
+  const pct  = parseFloat(sl?.value) || 0;
+  const miles = totalCapital > 0 ? (pct / 100) * totalCapital / 1000 : 0;
+  const mLabel = miles >= 1000 ? (miles/1000).toFixed(1)+'M' : miles.toFixed(miles < 10 ? 1 : 0)+'k';
+  const cm = document.getElementById('chip-miles-' + key);
+  const cp = document.getElementById('chip-pct-' + key);
+  if (cm) cm.textContent = mLabel;
+  if (cp) cp.textContent = pct + '%';
   updateSim();
 }
 
 function getSliders() {
   const vals = {};
   INSTRUMENTS.forEach(inst => {
-    vals[inst.key] = +(document.getElementById('sl-' + inst.key)?.value || 0);
+    const sl = document.getElementById('sl-' + inst.key);
+    vals[inst.key] = sl ? parseFloat(sl.value) || 0 : 0;
   });
   return vals;
+}
+
+function setActive(el) {
+  document.querySelectorAll('.sidebar-links a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+}
+function setBotActive(el) {
+  document.querySelectorAll('.bottom-nav a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
 }
 
 function fmt(n) { return Math.round(n).toLocaleString('es-AR'); }
@@ -837,7 +1146,7 @@ function updateSim() {
   const s = getSliders();
   const totalPct = Object.values(s).reduce((a,b) => a+b, 0);
   const over = totalPct > 100;
-  const exact = totalPct === 100;
+  const exact = Math.abs(totalPct - 100) < 0.1;
   const cap = totalCapital || 0;
 
   // Allocations from slider pct
@@ -1150,9 +1459,12 @@ function drawChart() {
   const cap        = totalCapital || 0;
   if (cap < 1) return;
 
-  // Get current weighted yield and variance from sliders
+  // Get current weighted yield and variance from pct inputs
   const s = {};
-  INSTRUMENTS.forEach(inst => { s[inst.key] = +(document.getElementById('sl-' + inst.key)?.value || 0); });
+  INSTRUMENTS.forEach(inst => {
+    const pctEl = document.getElementById('pct-' + inst.key);
+    s[inst.key] = pctEl ? parseFloat(pctEl.value) || 0 : 0;
+  });
   const usedPct = Math.min(Object.values(s).reduce((a,b)=>a+b,0), 100);
 
   let baseYield = 0, yieldVar = 0;
@@ -1181,15 +1493,18 @@ function drawChart() {
   }
 
   const labels  = Array.from({length: years + 1}, (_, i) => i === 0 ? 'Hoy' : 'Año ' + i);
-  const dataMid = simulate(annualRate);
-  const dataLo  = simulate(annualRateLo);
-  const dataHi  = simulate(annualRateHi);
 
-  const fmtK = v => {
-    if (v >= 1000000) return 'USD ' + (v/1000000).toFixed(1) + 'M';
-    if (v >= 1000)    return 'USD ' + Math.round(v/1000) + 'k';
-    return 'USD ' + Math.round(v);
-  };
+  // Convert to % gain over initial capital
+  const toPct = pts => pts.map(v => Math.round((v / cap - 1) * 1000) / 10); // one decimal
+  const dataMid = toPct(simulate(annualRate));
+  const dataLo  = toPct(simulate(annualRateLo));
+  const dataHi  = toPct(simulate(annualRateHi));
+
+  // Fixed Y ceiling based on horizon
+  const yMax = years <= 10 ? 150 : years <= 25 ? 400 : 1000;
+
+  const fmtPct = v => '+' + v.toFixed(1) + '%';
+  const fmtTip = v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
 
   const ctx = document.getElementById('proj-chart').getContext('2d');
 
@@ -1243,7 +1558,7 @@ function drawChart() {
         tooltip: {
           callbacks: {
             title: (items) => items[0].label,
-            label: (item) => item.dataset.label + ': ' + fmtK(item.raw),
+            label: (item) => item.dataset.label + ': ' + fmtTip(item.raw),
           },
           backgroundColor: '#1C1A17',
           titleColor: '#fff',
@@ -1263,11 +1578,13 @@ function drawChart() {
           }
         },
         y: {
+          min: 0,
+          max: yMax,
           grid: { color: 'rgba(28,26,23,0.06)', drawBorder: false },
           ticks: {
             font: { size: 10, family: 'DM Sans' },
             color: '#9C9890',
-            callback: fmtK,
+            callback: v => '+' + v + '%',
             maxTicksLimit: 6,
           }
         }
